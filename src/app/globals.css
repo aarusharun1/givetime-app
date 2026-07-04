@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #FDFCFA;
+  --bg-card: #FFFFFF;
+  --bg-filter: #F5F2ED;
+  --text-primary: #1A1A1A;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --border-color: #E5E2DD;
+  --border-hover: #D0CDC7;
+  --green-primary: #2E7D32;
+  --green-light: #E8F5E9;
+  --green-dark: #1b5e20;
+  --green-text: #1b5e20;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Tag colors */
+  --tag-type-bg: #EDEEF0;
+  --tag-type-text: #4A4D55;
+  --tag-county-bg: #EDE9FE;
+  --tag-county-text: #6D28D9;
+  --tag-age-bg: #FEF3C7;
+  --tag-age-text: #92400E;
+
+  /* Format tag colors */
+  --tag-format-inperson-bg: #E8F5E9;
+  --tag-format-inperson-text: #1b5e20;
+  --tag-format-online-bg: #E3F2FD;
+  --tag-format-online-text: #1565C0;
+  --tag-format-hybrid-bg: #FFF3E0;
+  --tag-format-hybrid-text: #E65100;
+}
+
+.dark {
+  --bg-primary: #121212;
+  --bg-card: #1E1E1E;
+  --bg-filter: #1A1A1A;
+  --text-primary: #E8E8E8;
+  --text-secondary: #A0A0A0;
+  --text-muted: #707070;
+  --border-color: #333333;
+  --border-hover: #444444;
+  --green-primary: #4CAF50;
+  --green-light: #1B3A1D;
+  --green-dark: #81C784;
+  --green-text: #81C784;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  /* Tag colors */
+  --tag-type-bg: #333338;
+  --tag-type-text: #C4C5C9;
+  --tag-county-bg: #2D1B69;
+  --tag-county-text: #C4B5FD;
+  --tag-age-bg: #422006;
+  --tag-age-text: #FCD34D;
+
+  /* Format tag colors */
+  --tag-format-inperson-bg: #14532D;
+  --tag-format-inperson-text: #86EFAC;
+  --tag-format-online-bg: #0C2D48;
+  --tag-format-online-text: #7DD3FC;
+  --tag-format-hybrid-bg: #431407;
+  --tag-format-hybrid-text: #FDBA74;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background-color: var(--green-primary);
+  color: white;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Filter pill scrollbar (horizontal) */
+.filter-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.filter-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.filter-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
