@@ -15,6 +15,8 @@ interface FilterBarProps {
   onAgeChange: (val: string) => void;
   resultCount: number;
   totalCount: number;
+  disabled?: boolean;
+  onDisabledClick?: () => void;
 }
 
 export default function FilterBar({
@@ -30,6 +32,8 @@ export default function FilterBar({
   onAgeChange,
   resultCount,
   totalCount,
+  disabled,
+  onDisabledClick,
 }: FilterBarProps) {
   const hasActiveFilters =
     search || selectedType !== "All" || selectedFormat !== "All" || selectedCounty !== "All" || age;
@@ -39,9 +43,19 @@ export default function FilterBar({
       className="sticky top-16 z-40 pb-4 pt-5"
       style={{ backgroundColor: "var(--bg-primary)" }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {disabled && (
+          <div
+            className="absolute inset-0 z-10 cursor-pointer rounded-lg"
+            onClick={onDisabledClick}
+            aria-label="Sign in to use filters"
+          />
+        )}
         {/* Search and quick filters row */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div
+          className="flex flex-col sm:flex-row gap-3 mb-4"
+          style={disabled ? { opacity: 0.5, pointerEvents: "none" } : undefined}
+        >
           {/* Search */}
           <div className="relative flex-1">
             <svg
@@ -132,7 +146,10 @@ export default function FilterBar({
         </div>
 
         {/* Type pills row */}
-        <div className="flex items-center gap-2">
+        <div
+          className="flex items-center gap-2"
+          style={disabled ? { opacity: 0.5, pointerEvents: "none" } : undefined}
+        >
           <div className="flex gap-2 overflow-x-auto filter-scroll pb-1 flex-1">
             <button
               onClick={() => onTypeChange("All")}

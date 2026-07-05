@@ -110,6 +110,8 @@ export default function Home() {
             onAgeChange={setAge}
             resultCount={filtered.length}
             totalCount={allOrgs.length}
+            disabled={!user}
+            onDisabledClick={() => setShowAuthModal(true)}
           />
 
           {/* Card grid */}
@@ -117,13 +119,13 @@ export default function Home() {
             {filtered.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {(user ? filtered : filtered.slice(0, PREVIEW_LIMIT)).map((org) => (
+                  {(user ? filtered : allOrgs.slice(0, PREVIEW_LIMIT)).map((org) => (
                     <OrgCard key={org.number} org={org} />
                   ))}
                 </div>
 
                 {/* Auth gate after preview cards */}
-                {!user && filtered.length > PREVIEW_LIMIT && (
+                {!user && allOrgs.length > PREVIEW_LIMIT && (
                   <div className="relative mt-4">
                     {/* Fade overlay on last row */}
                     <div
@@ -152,7 +154,7 @@ export default function Home() {
                         className="text-lg font-bold mb-2"
                         style={{ fontFamily: "'Sora', sans-serif", color: "var(--text-primary)" }}
                       >
-                        Sign in to see all {filtered.length} organizations
+                        Sign in to see all {allOrgs.length} organizations
                       </h2>
                       <p
                         className="text-sm mb-6 max-w-md mx-auto"
