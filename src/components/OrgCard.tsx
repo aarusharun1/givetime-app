@@ -21,7 +21,7 @@ function getFormatStyle(format: string) {
 
 export default function OrgCard({ org }: OrgCardProps) {
   const [open, setOpen] = useState(false);
-  const hasImage = org.image && org.image.startsWith("http");
+  const hasImage = Boolean(org.image && org.image.trim());
   const formatStyle = getFormatStyle(org.format);
 
   useEffect(() => {

@@ -14,8 +14,8 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://upchieve.org/volunteer-with-us",
-    "image": "https://i.postimg.cc/d0Cbb1Dn/a01-Upchieve-Cropped.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/upchieve.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 2,
@@ -32,8 +32,8 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.enginprogram.org/volunteer",
-    "image": "https://i.postimg.cc/4dTDsg9G/a02-ENGin.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/engin.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 3,
@@ -50,8 +50,8 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.salvationarmyusa.org/usn/volunteer/",
-    "image": "https://i.postimg.cc/XqjtBkLD/a03-Salvation-Army-svg.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/salvation-army.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 4,
@@ -68,8 +68,8 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.greenlivingscience.org/volunteer",
-    "image": "https://i.postimg.cc/RZw10qgQ/a04-green-living.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/green-living-science.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 5,
@@ -86,8 +86,8 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.trinityhealthmichigan.org/foundation-and-giving/volunteer/",
-    "image": "https://i.postimg.cc/85BqC0R6/a05-Trinity-Health-Cropped.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/trinity-health.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 6,
@@ -104,8 +104,8 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://www.forgottenharvest.org/volunteer-3/",
-    "image": "https://i.postimg.cc/CM73T9Ly/a07-forgotten-harvest-Cropped.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/forgotten-harvest.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 7,
@@ -123,7 +123,7 @@
     "countyFilter": "Oakland",
     "link": "https://www.oakgov.com/community/pet-adoption/pet-adoption-center/volunteer",
     "image": "https://i.postimg.cc/tCm87Px2/a08-Oakland-Pet.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "lastVerified": "â€”"
   },
   {
     "number": 8,
@@ -140,8 +140,8 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://livingandlearningcenter.org/support-us/",
-    "image": "https://i.postimg.cc/Dw9DPT5G/a09-living-learning.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/living-learning-enrichment-center.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 9,
@@ -158,8 +158,8 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://www.hhfp.org/volunteer/",
-    "image": "https://i.postimg.cc/8CLYy0n0/a10-hospitality-house.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/hospitality-house.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 10,
@@ -176,8 +176,8 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://corewellhealth.org/volunteer",
-    "image": "",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/corewell-health.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 11,
@@ -194,8 +194,8 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://novilibrary.org/programs-events/tween-teen/teen-advisory-board/",
-    "image": "https://i.postimg.cc/1t7wdFzP/a13-Novi-Lib.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/novi-public-library.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 12,
@@ -213,7 +213,7 @@
     "countyFilter": "Virtual",
     "link": "https://www.nokidhungry.org/ways-you-can-help",
     "image": "https://i.postimg.cc/yd80njsv/a14-No-Kid-Hungry.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "lastVerified": "â€”"
   },
   {
     "number": 13,
@@ -230,8 +230,8 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://cityofnovi.org/community/volunteer-novi/",
-    "image": "https://i.postimg.cc/NFymv0yX/a15-city-of-novi.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/novi-parks-and-rec.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 14,
@@ -248,8 +248,8 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://sharedetroit.org/opportunities/northville-community-foundation-maybury-farm/volunteers-maybury-farm",
-    "image": "https://i.postimg.cc/cCVYxNYb/a16-mayburry.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/maybury-farm.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 15,
@@ -266,8 +266,8 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.pointsoflight.org/mlk-jr-day-of-service/",
-    "image": "https://i.postimg.cc/Pfc1z1cQ/a17-mlk.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/mlk-day-of-service.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 16,
@@ -284,8 +284,8 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://fleeceandthankyou.org/volunteer/",
-    "image": "https://i.postimg.cc/J4kZTGCV/a18-fleece.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/fleece-thank-you.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 17,
@@ -302,8 +302,8 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://translatorswithoutborders.org/meet-the-twb-community",
-    "image": "https://i.postimg.cc/Sxb8HkmX/a19-t-wo-borders.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/translators-without-borders.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 18,
@@ -321,7 +321,7 @@
     "countyFilter": "Oakland",
     "link": "https://www.svtemplemi.org/volunteer/",
     "image": "https://i.postimg.cc/0yGmsFNV/a20-sv-temple.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "lastVerified": "â€”"
   },
   {
     "number": 19,
@@ -339,7 +339,7 @@
     "countyFilter": "Oakland",
     "link": "https://stjamesnovi.org/time-and-talent-registration-form",
     "image": "https://i.postimg.cc/SKy9Nd2k/a21-st-james.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "lastVerified": "â€”"
   },
   {
     "number": 20,
@@ -356,8 +356,8 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.brookdale.com/en/brookdale-life/volunteering.html",
-    "image": "https://i.postimg.cc/bJr21v95/a22-brokkdale.jpg",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/brookdale-senior-living.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 21,
@@ -374,8 +374,8 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://detroitopera.org/get-involved/volunteers/",
-    "image": "https://i.postimg.cc/gJ7LsPM2/a24-Det-opera.png",
-    "lastVerified": "\u00e2\u20ac\u201d"
+    "image": "/images/logos/detroit-opera-house.png",
+    "lastVerified": "â€”"
   },
   {
     "number": 22,
@@ -392,7 +392,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://lighthousemi.org/get-involved/volunteer/",
-    "image": "",
+    "image": "/images/logos/lighthouse-mi.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -410,7 +410,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://drmm.org/get-involved/",
-    "image": "",
+    "image": "/images/logos/detroit-rescue-mission-ministries.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -446,7 +446,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://casscommunity.org/volunteers/",
-    "image": "",
+    "image": "/images/logos/cass-community-social-services.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -482,7 +482,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://www.humbledesign.org/volunteer",
-    "image": "",
+    "image": "/images/logos/humble-design.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -500,7 +500,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://dia.org/learning/teen-council",
-    "image": "",
+    "image": "/images/logos/detroit-institute-of-arts.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -536,7 +536,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://mosaicdetroit.org/volunteer",
-    "image": "",
+    "image": "/images/logos/mosaic-youth-theatre-of-detroit.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -554,7 +554,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://miclubs.org/volunteers/",
-    "image": "",
+    "image": "/images/logos/metro-detroit-youth-clubs.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -572,7 +572,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://bgcsm.org/",
-    "image": "",
+    "image": "/images/logos/boys-girls-clubs-of-greater-detroit.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -590,7 +590,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://winningfutures.org/volunteer/be-a-mentor/",
-    "image": "",
+    "image": "/images/logos/winning-futures.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -608,7 +608,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://morc.easterseals.com/take-action/volunteer",
-    "image": "",
+    "image": "/images/logos/easterseals-morc-miracle-league.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -626,7 +626,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://detroitzoo.org/ways-to-support/volunteer/",
-    "image": "",
+    "image": "/images/logos/detroit-zoo.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -644,7 +644,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://mifreedomcenter.org/volunteer",
-    "image": "",
+    "image": "/images/logos/michigan-armed-forces-hospitality-center.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -662,7 +662,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.va.gov/detroit-health-care/work-with-us/volunteer-or-donate/",
-    "image": "",
+    "image": "/images/logos/va-detroit-healthcare-system.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -680,7 +680,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://soldiersangels.org/location/detroit-mi/",
-    "image": "",
+    "image": "/images/logos/soldiers-angels.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -698,7 +698,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.missioncontinues.org/service-platoon/Detroit/",
-    "image": "",
+    "image": "/images/logos/the-mission-continues-detroit-platoon.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -734,7 +734,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://schoolhouse.world/become-a-tutor",
-    "image": "",
+    "image": "/images/logos/schoolhouse-world.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -752,7 +752,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.stepuptutoring.org/volunteer-tutor",
-    "image": "",
+    "image": "/images/logos/step-up-tutoring.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -770,7 +770,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://readingpartners.org/volunteer-online-with-reading-partners/",
-    "image": "",
+    "image": "/images/logos/reading-partners.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -788,7 +788,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.gcfb.org/give-time/volunteer-opportunities/",
-    "image": "",
+    "image": "/images/logos/gleaners-community-food-bank.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -806,7 +806,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.cskdetroit.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/capuchin-soup-kitchen.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -824,7 +824,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.focushope.edu/get-involved/take-action/",
-    "image": "",
+    "image": "/images/logos/focus-hope.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -842,7 +842,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://makefoodnotwaste.org/donate/volunteer",
-    "image": "",
+    "image": "/images/logos/make-food-not-waste.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -860,7 +860,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.greeningofdetroit.com/volunteer",
-    "image": "",
+    "image": "/images/logos/the-greening-of-detroit.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -896,7 +896,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.metroparks.com/volunteer",
-    "image": "",
+    "image": "/images/logos/huron-clinton-metroparks.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -914,7 +914,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.redcross.org/volunteer/become-a-volunteer.html",
-    "image": "",
+    "image": "/images/logos/american-red-cross-se-michigan.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -950,7 +950,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://rmhcannarbor.org/how-to-help/volunteer/",
-    "image": "",
+    "image": "/images/logos/ronald-mcdonald-house-charities-michigan.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -968,7 +968,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://www.gildasclubdetroit.org/get-involved/volunteer/",
-    "image": "",
+    "image": "/images/logos/gilda-s-club-cancer-support-community.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -986,7 +986,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.crisistextline.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/crisis-text-line.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1004,7 +1004,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.7cups.com/listener/become-a-volunteer-listener.php",
-    "image": "",
+    "image": "/images/logos/7-cups.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1022,7 +1022,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://transcription.si.edu/",
-    "image": "",
+    "image": "/images/logos/smithsonian-transcription-center.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1058,7 +1058,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.archives.gov/citizen-archivist",
-    "image": "",
+    "image": "/images/logos/national-archives-citizen-archivist.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1076,7 +1076,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.zooniverse.org/get-involved/volunteer",
-    "image": "",
+    "image": "/images/logos/zooniverse.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1094,7 +1094,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.cardsforhospitalizedkids.com/volunteer-by-making-cards1.html",
-    "image": "",
+    "image": "/images/logos/cards-for-hospitalized-kids.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1112,7 +1112,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.lettersagainstisolation.com/",
-    "image": "",
+    "image": "/images/logos/letters-against-isolation.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1130,7 +1130,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.colorasmile.org/",
-    "image": "",
+    "image": "/images/logos/color-a-smile.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1148,7 +1148,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.operationgratitude.com/",
-    "image": "",
+    "image": "/images/logos/operation-gratitude.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1166,7 +1166,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.bemyeyes.com/be-my-eyes-volunteer-hub/",
-    "image": "",
+    "image": "/images/logos/be-my-eyes.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1184,7 +1184,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.tarjimly.org/get-involved/volunteer",
-    "image": "",
+    "image": "/images/logos/tarjimly.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1220,7 +1220,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.catchafire.org/volunteer-explore/",
-    "image": "",
+    "image": "/images/logos/catchafire.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1238,7 +1238,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.michiganhumane.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/michigan-humane.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1256,7 +1256,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://www.leaderdog.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/leader-dogs-for-the-blind.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1274,7 +1274,7 @@
     "county": "Washtenaw",
     "countyFilter": "Washtenaw",
     "link": "https://www.hshv.org/volunteer-2-2/juniorvolunteer/",
-    "image": "",
+    "image": "/images/logos/humane-society-of-huron-valley.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1292,7 +1292,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://marl.org/get-involved/volunteer/",
-    "image": "",
+    "image": "/images/logos/michigan-animal-rescue-league.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1310,7 +1310,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.detroitdogrescue.com/",
-    "image": "",
+    "image": "/images/logos/detroit-dog-rescue.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1346,7 +1346,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://yadezra.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/yad-ezra.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1364,7 +1364,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.ccsem.org/volunteer-opportunities",
-    "image": "",
+    "image": "/images/logos/catholic-charities-of-southeast-michigan.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1382,7 +1382,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.mi-sci.org/donate/volunteer/",
-    "image": "",
+    "image": "/images/logos/michigan-science-center.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1400,7 +1400,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "http://www.dapcep.org/volunteer-opportunities/",
-    "image": "",
+    "image": "/images/logos/dapcep.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1418,7 +1418,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://firstinmichigan.us/FRC/volunteer/",
-    "image": "",
+    "image": "/images/logos/first-in-michigan.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1436,7 +1436,7 @@
     "county": "Washtenaw",
     "countyFilter": "Washtenaw",
     "link": "https://discoverscienceandnature.org/volunteer",
-    "image": "",
+    "image": "/images/logos/ann-arbor-hands-on-museum.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1472,7 +1472,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://science.nasa.gov/citizen-science/",
-    "image": "",
+    "image": "/images/logos/nasa-citizen-science.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1490,7 +1490,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.inaturalist.org/",
-    "image": "",
+    "image": "/images/logos/inaturalist.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1526,7 +1526,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://habitatdetroit.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/habitat-for-humanity-detroit.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1562,7 +1562,7 @@
     "county": "Multiple",
     "countyFilter": "Multiple",
     "link": "https://www.somi.org/volunteer",
-    "image": "",
+    "image": "/images/logos/special-olympics-michigan.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1598,7 +1598,7 @@
     "county": "Oakland",
     "countyFilter": "Oakland",
     "link": "https://www.habitatoakland.org/",
-    "image": "",
+    "image": "/images/logos/habitat-for-humanity-oakland-county.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1616,7 +1616,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.detroitseniorsolution.org/how-to-give/volunteer/",
-    "image": "",
+    "image": "/images/logos/meals-on-wheels-detroit-area-agency-on-aging.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1634,7 +1634,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.belleisleconservancy.org/volunteer",
-    "image": "",
+    "image": "/images/logos/belle-isle-conservancy.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1652,7 +1652,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.detroitriverfront.org/support-us/volunteer",
-    "image": "",
+    "image": "/images/logos/detroit-riverfront-conservancy.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1670,7 +1670,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.detroitagriculture.net/volunteer",
-    "image": "",
+    "image": "/images/logos/keep-growing-detroit.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1688,7 +1688,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://librivox.org/pages/volunteer-for-librivox/",
-    "image": "",
+    "image": "/images/logos/librivox.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1706,7 +1706,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.hotosm.org/volunteer-opportunities/",
-    "image": "",
+    "image": "/images/logos/humanitarian-openstreetmap-missing-maps.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1724,7 +1724,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://www.pgdp.net/",
-    "image": "",
+    "image": "/images/logos/project-gutenberg-distributed-proofreaders.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1742,7 +1742,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://imentor.org/volunteer",
-    "image": "",
+    "image": "/images/logos/imentor.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1760,7 +1760,7 @@
     "county": "Virtual",
     "countyFilter": "Virtual",
     "link": "https://coachart.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/coachart.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1796,7 +1796,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.alternativesforgirls.org/volunteer/",
-    "image": "",
+    "image": "/images/logos/alternatives-for-girls.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1814,7 +1814,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://thawfund.org/",
-    "image": "",
+    "image": "/images/logos/the-heat-and-warmth-fund-thaw.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {
@@ -1832,7 +1832,7 @@
     "county": "Wayne",
     "countyFilter": "Wayne",
     "link": "https://www.detroithistorical.org/support/volunteer",
-    "image": "",
+    "image": "/images/logos/detroit-historical-society.png",
     "lastVerified": "2026-06-28 00:00:00"
   },
   {

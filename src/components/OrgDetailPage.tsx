@@ -5,7 +5,7 @@ import Header from "./Header";
 import Link from "next/link";
 
 export default function OrgDetailPage({ org }: { org: Organization }) {
-  const hasImage = org.image && org.image.startsWith("http");
+  const hasImage = Boolean(org.image && org.image.trim());
 
   return (
     <>
