@@ -4,6 +4,180 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "./AuthProvider";
 import { supabase, HourLog } from "@/lib/supabase";
 import LogHourModal from "./LogHourModal";
+import jsPDF from "jspdf";
+
+function exportCSV(logs: HourLog[], displayName: string) {
+  const header = "Organization,Category,Date,Hours,Notes";
+  const rows = logs
+    .slice()
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((l) => {
+      const date = new Date(l.date + "T00:00:00").toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+      const notes = l.notes ? `"${l.notes.replace(/"/g, '""')}"` : "";
+      const orgName = l.org_name.includes(",") ? `"${l.org_name}"` : l.org_name;
+      return `${orgName},${l.org_type},${date},${Number(l.hours).toFixed(2)},${notes}`;
+    });
+  const csv = [header, ...rows].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const firstName = displayName?.split(" ")[0] ?? "volunteer";
+  a.download = `givetime-hours-${firstName.toLowerCase()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportPDF(
+  logs: HourLog[],
+  analytics: {
+    totalHours: number;
+    totalEntries: number;
+    uniqueOrgs: number;
+    byType: { type: string; hours: number }[];
+    byOrg: { name: string; hours: number }[];
+  },
+  displayName: string
+) {
+  const doc = new jsPDF({ unit: "pt", format: "letter" });
+  const pageW = doc.internal.pageSize.getWidth();
+  const marginL = 56;
+  const marginR = 56;
+  const contentW = pageW - marginL - marginR;
+  let y = 56;
+
+  // Header
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(22);
+  doc.setTextColor(46, 125, 50);
+  doc.text("GiveTime", marginL, y);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(120, 120, 120);
+  doc.text("Volunteer Hour Report", marginL + doc.getTextWidth("GiveTime  ") + 4, y);
+  y += 32;
+
+  // Divider
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(marginL, y, pageW - marginR, y);
+  y += 24;
+
+  // Name and date range
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor(30, 30, 30);
+  doc.text(displayName || "Volunteer", marginL, y);
+  y += 18;
+
+  const dates = logs.map((l) => l.date).sort();
+  if (dates.length > 0) {
+    const fmt = (d: string) =>
+      new Date(d + "T00:00:00").toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`${fmt(dates[0])} to ${fmt(dates[dates.length - 1])}`, marginL, y);
+  }
+  y += 32;
+
+  // Summary stats row
+  const stats = [
+    { label: "Total Hours", value: analytics.totalHours.toFixed(1) },
+    { label: "Entries", value: analytics.totalEntries.toString() },
+    { label: "Organizations", value: analytics.uniqueOrgs.toString() },
+    { label: "Categories", value: analytics.byType.length.toString() },
+  ];
+  const statW = contentW / stats.length;
+  stats.forEach((stat, i) => {
+    const x = marginL + i * statW;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(46, 125, 50);
+    doc.text(stat.value, x, y);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(120, 120, 120);
+    doc.text(stat.label, x, y + 14);
+  });
+  y += 48;
+
+  // Divider
+  doc.line(marginL, y, pageW - marginR, y);
+  y += 24;
+
+  // Hours by Category
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setTextColor(30, 30, 30);
+  doc.text("Hours by Category", marginL, y);
+  y += 20;
+
+  analytics.byType.forEach((item) => {
+    const pct = analytics.totalHours > 0 ? (item.hours / analytics.totalHours) * 100 : 0;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(60, 60, 60);
+    doc.text(item.type, marginL, y);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`${item.hours.toFixed(1)} hrs (${pct.toFixed(0)}%)`, marginL + contentW - doc.getTextWidth(`${item.hours.toFixed(1)} hrs (${pct.toFixed(0)}%)`), y);
+
+    // Progress bar
+    y += 6;
+    doc.setFillColor(230, 230, 230);
+    doc.roundedRect(marginL, y, contentW, 6, 3, 3, "F");
+    if (pct > 0) {
+      doc.setFillColor(46, 125, 50);
+      doc.roundedRect(marginL, y, Math.max((contentW * pct) / 100, 6), 6, 3, 3, "F");
+    }
+    y += 20;
+  });
+  y += 8;
+
+  // Top 5 Organizations
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setTextColor(30, 30, 30);
+  doc.text("Top Organizations", marginL, y);
+  y += 20;
+
+  analytics.byOrg.slice(0, 5).forEach((item, i) => {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(60, 60, 60);
+    doc.text(`${i + 1}. ${item.name}`, marginL, y);
+    doc.setTextColor(100, 100, 100);
+    const hoursText = `${item.hours.toFixed(1)} hrs`;
+    doc.text(hoursText, marginL + contentW - doc.getTextWidth(hoursText), y);
+    y += 18;
+  });
+  y += 16;
+
+  // Footer divider
+  doc.setDrawColor(200, 200, 200);
+  doc.line(marginL, y, pageW - marginR, y);
+  y += 16;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(160, 160, 160);
+  doc.text(
+    `Generated by GiveTime on ${new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`,
+    marginL,
+    y
+  );
+  doc.text("givetime.co", marginL + contentW - doc.getTextWidth("givetime.co"), y);
+
+  const firstName = displayName?.split(" ")[0] ?? "volunteer";
+  doc.save(`givetime-report-${firstName.toLowerCase()}.pdf`);
+}
 
 export default function MyHours() {
   const { user, profile } = useAuth();
@@ -136,20 +310,62 @@ export default function MyHours() {
                 : `You've logged ${analytics.totalHours.toFixed(1)} hours across ${analytics.uniqueOrgs} organization${analytics.uniqueOrgs !== 1 ? "s" : ""}.`}
             </p>
           </div>
-          <button
-            onClick={() => setShowLogModal(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors shrink-0"
-            style={{
-              backgroundColor: "var(--green-primary)",
-              fontFamily: "'Sora', sans-serif",
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            <span className="hidden sm:inline">Log hours</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {logs.length > 0 && (
+              <>
+                <button
+                  onClick={() => exportCSV(logs, profile?.display_name ?? "")}
+                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors"
+                  style={{
+                    color: "var(--text-secondary)",
+                    border: "1px solid var(--border-color)",
+                    fontFamily: "'Sora', sans-serif",
+                  }}
+                  title="Export all entries as CSV"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span className="hidden sm:inline">CSV</span>
+                </button>
+                <button
+                  onClick={() =>
+                    exportPDF(logs, analytics, profile?.display_name ?? "")
+                  }
+                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors"
+                  style={{
+                    color: "var(--text-secondary)",
+                    border: "1px solid var(--border-color)",
+                    fontFamily: "'Sora', sans-serif",
+                  }}
+                  title="Export summary report as PDF"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span className="hidden sm:inline">PDF</span>
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => setShowLogModal(true)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+              style={{
+                backgroundColor: "var(--green-primary)",
+                fontFamily: "'Sora', sans-serif",
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span className="hidden sm:inline">Log hours</span>
+            </button>
+          </div>
         </div>
 
         {logs.length === 0 ? (
