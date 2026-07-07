@@ -58,14 +58,14 @@ function exportPDF(
     `data:image/png;base64,${logoB64}`,
     "PNG",
     marginL,
-    y - logoH + 4,
+    y,
     logoW,
     logoH
   );
-  y += 6;
+  y += logoH + 10;
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.setTextColor(120, 120, 120);
+  doc.setTextColor(30, 30, 30);
   doc.text("Volunteer Hour Report", marginL, y);
   y += 24;
 
