@@ -1,20 +1,20 @@
 export interface Organization {
-  number: number;
+  id: string;
   name: string;
   slug: string;
   format: string;
   type: string;
-  hourCommitment: string;
-  minAge: number;
-  minAgeDisplay: string;
-  parentRequired: string;
+  hour_commitment: string;
+  min_age: number;
+  min_age_display: string;
+  parent_required: string;
   description: string;
   location: string;
   county: string;
-  countyFilter: string;
   link: string;
   image: string;
-  lastVerified: string;
+  last_verified: string;
+  created_at: string;
 }
 
 export const ORG_TYPES = [

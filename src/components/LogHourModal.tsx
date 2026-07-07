@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { supabase } from "@/lib/supabase";
-import organizationsData from "@/data/organizations.json";
-import { Organization, ORG_TYPES } from "@/data/types";
-
-const allOrgs = organizationsData as Organization[];
+import { useOrganizations } from "@/lib/useOrganizations";
+import { ORG_TYPES } from "@/data/types";
 
 interface LogHourModalProps {
   isOpen: boolean;
@@ -22,6 +20,7 @@ export default function LogHourModal({
   preselectedOrg,
 }: LogHourModalProps) {
   const { user } = useAuth();
+  const { organizations: allOrgs } = useOrganizations();
   const [selectedOrgSlug, setSelectedOrgSlug] = useState(
     preselectedOrg?.slug ?? ""
   );

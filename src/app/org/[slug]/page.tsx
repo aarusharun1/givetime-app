@@ -1,13 +1,12 @@
-import organizations from "@/data/organizations.json";
 import { Organization } from "@/data/types";
 import OrgDetailPage from "@/components/OrgDetailPage";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { fetchOrgBySlug, fetchAllSlugs } from "@/lib/organizations";
 
-const orgs = organizations as Organization[];
-
-export function generateStaticParams() {
-  return orgs.map((org) => ({ slug: org.slug }));
+export async function generateStaticParams() {
+  const slugs = await fetchAllSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -16,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const org = orgs.find((o) => o.slug === slug);
+  const org = await fetchOrgBySlug(slug);
   if (!org) return { title: "Not Found - GiveTime" };
 
   return {
@@ -31,7 +30,7 @@ export default async function OrgPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const org = orgs.find((o) => o.slug === slug);
+  const org = await fetchOrgBySlug(slug);
   if (!org) notFound();
 
   return <OrgDetailPage org={org} />;

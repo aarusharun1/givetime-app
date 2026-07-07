@@ -118,7 +118,7 @@ export default function OrgCard({ org }: OrgCardProps) {
             </span>
 
             {/* Age - amber */}
-            {org.minAge > 0 && (
+            {org.min_age > 0 && (
               <span
                 className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-inter font-medium"
                 style={{
@@ -126,7 +126,7 @@ export default function OrgCard({ org }: OrgCardProps) {
                   color: "var(--tag-age-text)",
                 }}
               >
-                {org.minAgeDisplay}
+                {org.min_age_display}
               </span>
             )}
 
@@ -242,15 +242,15 @@ export default function OrgCard({ org }: OrgCardProps) {
                   </div>
                   <div>
                     <p className="text-xs" style={{ color: "var(--text-muted)" }}>Hour commitment</p>
-                    <p style={{ color: "var(--text-primary)" }}>{org.hourCommitment}</p>
+                    <p style={{ color: "var(--text-primary)" }}>{org.hour_commitment}</p>
                   </div>
                   <div>
                     <p className="text-xs" style={{ color: "var(--text-muted)" }}>Minimum age</p>
-                    <p style={{ color: "var(--text-primary)" }}>{org.minAgeDisplay}</p>
+                    <p style={{ color: "var(--text-primary)" }}>{org.min_age_display}</p>
                   </div>
                   <div>
                     <p className="text-xs" style={{ color: "var(--text-muted)" }}>Parent required</p>
-                    <p style={{ color: "var(--text-primary)" }}>{org.parentRequired || "N/A"}</p>
+                    <p style={{ color: "var(--text-primary)" }}>{org.parent_required || "N/A"}</p>
                   </div>
                 </div>
               </div>

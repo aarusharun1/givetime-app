@@ -125,15 +125,15 @@ export default function OrgDetailPage({ org }: { org: Organization }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <DetailItem label="Location" value={org.location} />
             <DetailItem label="County" value={org.county} />
-            <DetailItem label="Hour commitment" value={org.hourCommitment} />
-            <DetailItem label="Minimum age" value={org.minAgeDisplay} />
+            <DetailItem label="Hour commitment" value={org.hour_commitment} />
+            <DetailItem label="Minimum age" value={org.min_age_display} />
             <DetailItem
               label="Parent required"
-              value={org.parentRequired || "N/A"}
+              value={org.parent_required || "N/A"}
             />
             <DetailItem
               label="Last verified"
-              value={org.lastVerified || "Not yet verified"}
+              value={org.last_verified || "Not yet verified"}
             />
           </div>
         </div>

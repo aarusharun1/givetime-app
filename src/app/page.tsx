@@ -7,15 +7,13 @@ import OrgCard from "@/components/OrgCard";
 import MyHours from "@/components/MyHours";
 import AuthModal from "@/components/AuthModal";
 import { useAuth } from "@/components/AuthProvider";
-import organizationsData from "@/data/organizations.json";
-import { Organization } from "@/data/types";
+import { useOrganizations } from "@/lib/useOrganizations";
 
 const PREVIEW_LIMIT = 12;
 
-const allOrgs = organizationsData as Organization[];
-
 export default function Home() {
   const { user } = useAuth();
+  const { organizations: allOrgs, loading: orgsLoading } = useOrganizations();
   const [activeTab, setActiveTab] = useState<"browse" | "hours">("browse");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [search, setSearch] = useState("");
@@ -34,7 +32,6 @@ export default function Home() {
           org.type.toLowerCase().includes(q) ||
           org.location.toLowerCase().includes(q) ||
           org.county.toLowerCase().includes(q) ||
-          org.countyFilter.toLowerCase().includes(q) ||
           org.format.toLowerCase().includes(q);
         if (!matchesSearch) return false;
       }
@@ -48,14 +45,14 @@ export default function Home() {
           return false;
         }
       }
-      if (selectedCounty !== "All" && org.countyFilter !== selectedCounty) return false;
+      if (selectedCounty !== "All" && org.county !== selectedCounty) return false;
       if (age) {
         const userAge = parseInt(age);
-        if (!isNaN(userAge) && org.minAge > 0 && userAge < org.minAge) return false;
+        if (!isNaN(userAge) && org.min_age > 0 && userAge < org.min_age) return false;
       }
       return true;
     });
-  }, [search, selectedType, selectedFormat, selectedCounty, age]);
+  }, [allOrgs, search, selectedType, selectedFormat, selectedCounty, age]);
 
   return (
     <>
@@ -116,11 +113,20 @@ export default function Home() {
 
           {/* Card grid */}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-2">
-            {filtered.length > 0 ? (
+            {orgsLoading ? (
+              <div className="text-center py-16">
+                <p
+                  className="font-inter text-sm"
+                  style={{ color: "var(--text-muted)" }}
+                >
+                  Loading organizations...
+                </p>
+              </div>
+            ) : filtered.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {(user ? filtered : allOrgs.slice(0, PREVIEW_LIMIT)).map((org) => (
-                    <OrgCard key={org.number} org={org} />
+                    <OrgCard key={org.slug} org={org} />
                   ))}
                 </div>
 
