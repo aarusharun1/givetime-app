@@ -245,6 +245,15 @@ export default function Home() {
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm font-inter mb-4">
+            <a
+              href="/submit"
+              className="font-medium transition-colors"
+              style={{ color: "var(--green-primary)" }}
+            >
+              Submit an organization
+            </a>
+          </p>
           <p
             className="text-xs font-inter leading-relaxed mb-2"
             style={{ color: "var(--text-muted)" }}
