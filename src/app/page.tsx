@@ -21,6 +21,7 @@ export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState("All");
   const [selectedCounty, setSelectedCounty] = useState("All");
   const [age, setAge] = useState("");
+  const [tracksHoursOnly, setTracksHoursOnly] = useState(false);
 
   const filtered = useMemo(() => {
     return allOrgs.filter((org) => {
@@ -50,9 +51,10 @@ export default function Home() {
         const userAge = parseInt(age);
         if (!isNaN(userAge) && org.min_age > 0 && userAge < org.min_age) return false;
       }
+      if (tracksHoursOnly && !org.tracks_hours) return false;
       return true;
     });
-  }, [allOrgs, search, selectedType, selectedFormat, selectedCounty, age]);
+  }, [allOrgs, search, selectedType, selectedFormat, selectedCounty, age, tracksHoursOnly]);
 
   return (
     <>
@@ -105,6 +107,8 @@ export default function Home() {
             onCountyChange={setSelectedCounty}
             age={age}
             onAgeChange={setAge}
+            tracksHoursOnly={tracksHoursOnly}
+            onTracksHoursChange={setTracksHoursOnly}
             resultCount={filtered.length}
             totalCount={allOrgs.length}
             disabled={!user}

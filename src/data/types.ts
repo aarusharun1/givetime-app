@@ -14,6 +14,7 @@ export interface Organization {
   link: string;
   image: string;
   last_verified: string;
+  tracks_hours: boolean;
   created_at: string;
 }
 

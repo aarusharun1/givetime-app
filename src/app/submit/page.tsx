@@ -27,6 +27,7 @@ export default function SubmitPage() {
   const [hourCommitment, setHourCommitment] = useState("");
   const [minAge, setMinAge] = useState("");
   const [parentRequired, setParentRequired] = useState("");
+  const [tracksHours, setTracksHours] = useState(false);
   const [contactEmail, setContactEmail] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,6 +68,7 @@ export default function SubmitPage() {
         parent_required: parentRequired || "",
         submitter_id: user.id,
         submitter_email: contactEmail.trim() || user.email || "",
+        tracks_hours: tracksHours,
       });
 
     setSubmitting(false);
@@ -90,6 +92,7 @@ export default function SubmitPage() {
     setHourCommitment("");
     setMinAge("");
     setParentRequired("");
+    setTracksHours(false);
     setContactEmail("");
     setSubmitted(false);
     setError("");
@@ -404,6 +407,24 @@ export default function SubmitPage() {
                   <option value="Varies">Varies</option>
                 </select>
               </Field>
+
+              {/* Tracks hours */}
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="tracksHours"
+                  checked={tracksHours}
+                  onChange={(e) => setTracksHours(e.target.checked)}
+                  className="w-4 h-4 rounded cursor-pointer accent-green-600"
+                />
+                <label
+                  htmlFor="tracksHours"
+                  className="text-sm font-medium cursor-pointer"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  This organization tracks or certifies volunteer hours
+                </label>
+              </div>
 
               {/* Contact email */}
               <Field label="Your contact email">

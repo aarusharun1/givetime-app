@@ -135,6 +135,10 @@ export default function OrgDetailPage({ org }: { org: Organization }) {
               label="Last verified"
               value={org.last_verified || "Not yet verified"}
             />
+            <DetailItem
+              label="Tracks service hours"
+              value={org.tracks_hours ? "Yes" : "No"}
+            />
           </div>
         </div>
 

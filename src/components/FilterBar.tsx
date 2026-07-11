@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ORG_TYPES, FORMATS, COUNTIES } from "@/data/types";
 
 interface FilterBarProps {
@@ -13,10 +14,28 @@ interface FilterBarProps {
   onCountyChange: (val: string) => void;
   age: string;
   onAgeChange: (val: string) => void;
+  tracksHoursOnly: boolean;
+  onTracksHoursChange: (val: boolean) => void;
   resultCount: number;
   totalCount: number;
   disabled?: boolean;
   onDisabledClick?: () => void;
+}
+
+// Approximate county bounding boxes for SE Michigan
+const COUNTY_BOUNDS: Record<string, { minLat: number; maxLat: number; minLng: number; maxLng: number }> = {
+  Oakland: { minLat: 42.44, maxLat: 42.77, minLng: -83.69, maxLng: -83.10 },
+  Wayne: { minLat: 42.05, maxLat: 42.45, minLng: -83.55, maxLng: -82.90 },
+  Washtenaw: { minLat: 42.06, maxLat: 42.44, minLng: -84.08, maxLng: -83.54 },
+};
+
+function getCountyFromCoords(lat: number, lng: number): string | null {
+  for (const [county, bounds] of Object.entries(COUNTY_BOUNDS)) {
+    if (lat >= bounds.minLat && lat <= bounds.maxLat && lng >= bounds.minLng && lng <= bounds.maxLng) {
+      return county;
+    }
+  }
+  return null;
 }
 
 export default function FilterBar({
@@ -30,13 +49,45 @@ export default function FilterBar({
   onCountyChange,
   age,
   onAgeChange,
+  tracksHoursOnly,
+  onTracksHoursChange,
   resultCount,
   totalCount,
   disabled,
   onDisabledClick,
 }: FilterBarProps) {
+  const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState("");
+
   const hasActiveFilters =
-    search || selectedType !== "All" || selectedFormat !== "All" || selectedCounty !== "All" || age;
+    search || selectedType !== "All" || selectedFormat !== "All" || selectedCounty !== "All" || age || tracksHoursOnly;
+
+  const handleNearMe = () => {
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    setLocating(true);
+    setLocationError("");
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const county = getCountyFromCoords(position.coords.latitude, position.coords.longitude);
+        if (county) {
+          onCountyChange(county);
+        } else {
+          setLocationError("Could not match your location to a county in our database.");
+        }
+        setLocating(false);
+      },
+      () => {
+        setLocationError("Could not get your location. Check your browser permissions.");
+        setLocating(false);
+      },
+      { timeout: 10000 }
+    );
+  };
 
   return (
     <div
@@ -126,26 +177,52 @@ export default function FilterBar({
             ))}
           </select>
 
-          {/* County dropdown */}
-          <select
-            value={selectedCounty}
-            onChange={(e) => onCountyChange(e.target.value)}
-            className="px-3 py-2.5 rounded-lg text-sm font-inter cursor-pointer transition-colors shrink-0"
-            style={{
-              backgroundColor: "var(--bg-card)",
-              border: "1px solid var(--border-color)",
-              color: "var(--text-primary)",
-            }}
-          >
-            {COUNTIES.map((c) => (
-              <option key={c} value={c}>
-                {c === "All" ? "All counties" : c}
-              </option>
-            ))}
-          </select>
+          {/* County dropdown + Near Me */}
+          <div className="flex items-center gap-2 shrink-0">
+            <select
+              value={selectedCounty}
+              onChange={(e) => onCountyChange(e.target.value)}
+              className="px-3 py-2.5 rounded-lg text-sm font-inter cursor-pointer transition-colors"
+              style={{
+                backgroundColor: "var(--bg-card)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-primary)",
+              }}
+            >
+              {COUNTIES.map((c) => (
+                <option key={c} value={c}>
+                  {c === "All" ? "All counties" : c}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={handleNearMe}
+              disabled={locating}
+              title="Find organizations near me"
+              className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-sm font-inter transition-colors shrink-0"
+              style={{
+                backgroundColor: "var(--bg-card)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-secondary)",
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                <circle cx="12" cy="9" r="2.5" />
+              </svg>
+              {locating ? "..." : "Near me"}
+            </button>
+          </div>
         </div>
 
-        {/* Type pills row */}
+        {/* Location error */}
+        {locationError && (
+          <p className="text-xs mb-3 px-1" style={{ color: "var(--text-muted)" }}>
+            {locationError}
+          </p>
+        )}
+
+        {/* Type pills + tracks hours toggle row */}
         <div
           className="flex items-center gap-2"
           style={disabled ? { opacity: 0.5, pointerEvents: "none" } : undefined}
@@ -189,6 +266,29 @@ export default function FilterBar({
                 {type}
               </button>
             ))}
+
+            {/* Tracks hours toggle pill */}
+            <button
+              onClick={() => onTracksHoursChange(!tracksHoursOnly)}
+              className="px-4 py-1.5 rounded-full text-sm font-inter whitespace-nowrap transition-all duration-200 shrink-0 flex items-center gap-1.5"
+              style={{
+                backgroundColor: tracksHoursOnly
+                  ? "var(--tag-age-bg)"
+                  : "var(--bg-card)",
+                color: tracksHoursOnly
+                  ? "var(--tag-age-text)"
+                  : "var(--text-secondary)",
+                border: tracksHoursOnly
+                  ? "1px solid var(--tag-age-text)"
+                  : "1px solid var(--border-color)",
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              Tracks hours
+            </button>
           </div>
 
           {/* Result count + clear */}
@@ -207,6 +307,7 @@ export default function FilterBar({
                   onFormatChange("All");
                   onCountyChange("All");
                   onAgeChange("");
+                  onTracksHoursChange(false);
                 }}
                 className="text-xs font-inter px-2 py-1 rounded transition-colors"
                 style={{
