@@ -88,6 +88,37 @@ export default function OrgDetailPage({ org }: { org: Organization }) {
               >
                 {org.format}
               </span>
+              {org.min_age > 0 && (
+                <span
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-inter"
+                  style={{
+                    backgroundColor: "var(--tag-age-bg)",
+                    color: "var(--tag-age-text)",
+                  }}
+                >
+                  {org.min_age_display}
+                </span>
+              )}
+              <span
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm font-inter"
+                style={{
+                  backgroundColor: "var(--tag-county-bg)",
+                  color: "var(--tag-county-text)",
+                }}
+              >
+                {org.county}
+              </span>
+              {org.tracks_hours && (
+                <span
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-inter"
+                  style={{
+                    backgroundColor: "var(--tag-tracks-bg, #FCE4EC)",
+                    color: "var(--tag-tracks-text, #AD1457)",
+                  }}
+                >
+                  Tracks hours
+                </span>
+              )}
             </div>
           </div>
         </div>

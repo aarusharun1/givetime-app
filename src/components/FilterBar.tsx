@@ -270,23 +270,19 @@ export default function FilterBar({
             {/* Tracks hours toggle pill */}
             <button
               onClick={() => onTracksHoursChange(!tracksHoursOnly)}
-              className="px-4 py-1.5 rounded-full text-sm font-inter whitespace-nowrap transition-all duration-200 shrink-0 flex items-center gap-1.5"
+              className="px-4 py-1.5 rounded-full text-sm font-inter whitespace-nowrap transition-all duration-200 shrink-0"
               style={{
                 backgroundColor: tracksHoursOnly
-                  ? "var(--tag-age-bg)"
+                  ? "var(--tag-tracks-bg, #FCE4EC)"
                   : "var(--bg-card)",
                 color: tracksHoursOnly
-                  ? "var(--tag-age-text)"
+                  ? "var(--tag-tracks-text, #AD1457)"
                   : "var(--text-secondary)",
                 border: tracksHoursOnly
-                  ? "1px solid var(--tag-age-text)"
+                  ? "1px solid var(--tag-tracks-text, #AD1457)"
                   : "1px solid var(--border-color)",
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
               Tracks hours
             </button>
           </div>

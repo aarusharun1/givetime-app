@@ -141,19 +141,15 @@ export default function OrgCard({ org }: OrgCardProps) {
               {org.county}
             </span>
 
-            {/* Tracks hours - green accent */}
+            {/* Tracks hours - pink */}
             {org.tracks_hours && (
               <span
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-inter font-medium"
+                className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-inter font-medium"
                 style={{
-                  backgroundColor: "var(--tag-format-inperson-bg)",
-                  color: "var(--tag-format-inperson-text)",
+                  backgroundColor: "var(--tag-tracks-bg, #FCE4EC)",
+                  color: "var(--tag-tracks-text, #AD1457)",
                 }}
               >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
                 Tracks hours
               </span>
             )}
@@ -231,6 +227,31 @@ export default function OrgCard({ org }: OrgCardProps) {
                     >
                       {org.format}
                     </span>
+                    {org.min_age > 0 && (
+                      <span
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-inter font-medium"
+                        style={{ backgroundColor: "var(--tag-age-bg)", color: "var(--tag-age-text)" }}
+                      >
+                        {org.min_age_display}
+                      </span>
+                    )}
+                    <span
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-inter font-medium"
+                      style={{ backgroundColor: "var(--tag-county-bg)", color: "var(--tag-county-text)" }}
+                    >
+                      {org.county}
+                    </span>
+                    {org.tracks_hours && (
+                      <span
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-inter font-medium"
+                        style={{
+                          backgroundColor: "var(--tag-tracks-bg, #FCE4EC)",
+                          color: "var(--tag-tracks-text, #AD1457)",
+                        }}
+                      >
+                        Tracks hours
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

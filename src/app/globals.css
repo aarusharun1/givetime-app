@@ -27,6 +27,8 @@
   --tag-county-text: #6D28D9;
   --tag-age-bg: #FEF3C7;
   --tag-age-text: #92400E;
+  --tag-tracks-bg: #FCE4EC;
+  --tag-tracks-text: #AD1457;
 
   /* Format tag colors */
   --tag-format-inperson-bg: #E8F5E9;
@@ -60,6 +62,8 @@
   --tag-county-text: #C4B5FD;
   --tag-age-bg: #422006;
   --tag-age-text: #FCD34D;
+  --tag-tracks-bg: #4A1035;
+  --tag-tracks-text: #F48FB1;
 
   /* Format tag colors */
   --tag-format-inperson-bg: #14532D;
