@@ -187,6 +187,14 @@ export default function Header({ activeTab = "browse", onTabChange }: HeaderProp
                               </button>
                             </div>
                           )}
+                          <a
+                            href="/submit"
+                            onClick={() => setShowUserMenu(false)}
+                            className="block w-full text-left px-4 py-2 text-sm hover:opacity-70"
+                            style={{ color: "var(--text-primary)" }}
+                          >
+                            Submit an organization
+                          </a>
                           <button
                             onClick={() => {
                               signOut();

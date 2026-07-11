@@ -120,4 +120,11 @@ html {
 .filter-scroll::-webkit-scrollbar-thumb {
   background: var(--border-color);
   border-radius: 4px;
+  transition: background 0.2s;
+}
+.filter-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+.filter-scroll::-webkit-scrollbar-thumb:active {
+  background: var(--text-secondary);
 }

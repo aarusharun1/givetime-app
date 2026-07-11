@@ -105,7 +105,7 @@ export default function FilterBar({
 
   return (
     <div
-      className="sticky top-16 z-40 pb-4 pt-5"
+      className="sticky top-16 z-40 pb-5 pt-5"
       style={{ backgroundColor: "var(--bg-primary)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -262,7 +262,7 @@ export default function FilterBar({
             {ORG_TYPES.map((type) => (
               <button
                 key={type}
-                onClick={() => onTypeChange(type)}
+                onClick={() => onTypeChange(selectedType === type ? "All" : type)}
                 className="px-4 py-1.5 rounded-full text-sm font-inter whitespace-nowrap transition-all duration-200 shrink-0"
                 style={{
                   backgroundColor:
