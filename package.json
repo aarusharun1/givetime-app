@@ -5,9 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:cap": "CAPACITOR_BUILD=true next build",
+    "cap:sync": "npx cap sync"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.4.1",
+    "@capacitor/push-notifications": "^8.1.1",
+    "@capacitor/share": "^8.0.1",
     "@supabase/supabase-js": "^2.110.0",
     "jspdf": "^4.2.1",
     "next": "^15.1.0",
