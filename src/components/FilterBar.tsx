@@ -58,11 +58,24 @@ export default function FilterBar({
 }: FilterBarProps) {
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState("");
+  const [nearMeActive, setNearMeActive] = useState(false);
 
   const hasActiveFilters =
     search || selectedType !== "All" || selectedFormat !== "All" || selectedCounty !== "All" || age || tracksHoursOnly;
 
+  // Reset nearMeActive if county is changed manually or cleared
+  const handleCountyChange = (val: string) => {
+    if (val === "All") setNearMeActive(false);
+    onCountyChange(val);
+  };
+
   const handleNearMe = () => {
+    if (nearMeActive) {
+      setNearMeActive(false);
+      onCountyChange("All");
+      return;
+    }
+
     if (!navigator.geolocation) {
       setLocationError("Geolocation is not supported by your browser.");
       return;
@@ -76,6 +89,7 @@ export default function FilterBar({
         const county = getCountyFromCoords(position.coords.latitude, position.coords.longitude);
         if (county) {
           onCountyChange(county);
+          setNearMeActive(true);
         } else {
           setLocationError("Could not match your location to a county in our database.");
         }
@@ -181,7 +195,7 @@ export default function FilterBar({
           <div className="flex items-center gap-2 shrink-0">
             <select
               value={selectedCounty}
-              onChange={(e) => onCountyChange(e.target.value)}
+              onChange={(e) => handleCountyChange(e.target.value)}
               className="px-3 py-2.5 rounded-lg text-sm font-inter cursor-pointer transition-colors"
               style={{
                 backgroundColor: "var(--bg-card)",
@@ -201,16 +215,16 @@ export default function FilterBar({
               title="Find organizations near me"
               className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-sm font-inter transition-colors shrink-0"
               style={{
-                backgroundColor: "var(--bg-card)",
-                border: "1px solid var(--border-color)",
-                color: "var(--text-secondary)",
+                backgroundColor: nearMeActive ? "var(--green-primary)" : "var(--bg-card)",
+                border: nearMeActive ? "1px solid var(--green-primary)" : "1px solid var(--border-color)",
+                color: nearMeActive ? "#fff" : "var(--text-secondary)",
               }}
             >
+              {locating ? "..." : "Near Me"}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                 <circle cx="12" cy="9" r="2.5" />
               </svg>
-              {locating ? "..." : "Near me"}
             </button>
           </div>
         </div>
@@ -304,6 +318,7 @@ export default function FilterBar({
                   onCountyChange("All");
                   onAgeChange("");
                   onTracksHoursChange(false);
+                  setNearMeActive(false);
                 }}
                 className="text-xs font-inter px-2 py-1 rounded transition-colors"
                 style={{
