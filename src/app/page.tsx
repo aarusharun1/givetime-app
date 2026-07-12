@@ -1,20 +1,27 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
 import Header from "@/components/Header";
 import FilterBar from "@/components/FilterBar";
 import OrgCard from "@/components/OrgCard";
 import MyHours from "@/components/MyHours";
 import AuthModal from "@/components/AuthModal";
+import NativeWelcome from "@/components/NativeWelcome";
+import NativeTabBar from "@/components/NativeTabBar";
+import ProfileTab from "@/components/ProfileTab";
 import { useAuth } from "@/components/AuthProvider";
+import { useTheme } from "@/components/ThemeProvider";
 import { useOrganizations } from "@/lib/useOrganizations";
+import { isNativePlatform } from "@/lib/platform";
 
 const PREVIEW_LIMIT = 12;
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { theme } = useTheme();
   const { organizations: allOrgs, loading: orgsLoading } = useOrganizations();
-  const [activeTab, setActiveTab] = useState<"browse" | "hours">("browse");
+  const [activeTab, setActiveTab] = useState<"browse" | "hours" | "profile">("browse");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("All");
@@ -22,6 +29,12 @@ export default function Home() {
   const [selectedCounty, setSelectedCounty] = useState("All");
   const [age, setAge] = useState("");
   const [tracksHoursOnly, setTracksHoursOnly] = useState(false);
+
+  // Detect native platform after hydration
+  const [isNative, setIsNative] = useState(false);
+  useEffect(() => {
+    setIsNative(isNativePlatform());
+  }, []);
 
   const filtered = useMemo(() => {
     return allOrgs.filter((org) => {
@@ -56,11 +69,167 @@ export default function Home() {
     });
   }, [allOrgs, search, selectedType, selectedFormat, selectedCounty, age, tracksHoursOnly]);
 
+  // Shared org grid content (used by both web and native browse)
+  const orgGrid = (
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-2">
+      {orgsLoading ? (
+        <div className="text-center py-16">
+          <p
+            className="font-inter text-sm"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Loading organizations...
+          </p>
+        </div>
+      ) : filtered.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((org) => (
+            <OrgCard key={org.slug} org={org} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-16">
+          <div
+            className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: "var(--bg-filter)" }}
+          >
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--text-muted)"
+              strokeWidth="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+          <h2
+            className="font-sora font-bold text-lg mb-1"
+            style={{ color: "var(--text-primary)" }}
+          >
+            No organizations found
+          </h2>
+          <p
+            className="font-inter text-sm"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            Try adjusting your filters or search terms
+          </p>
+        </div>
+      )}
+    </main>
+  );
+
+  // ─── NATIVE APP LAYOUT ───────────────────────────────────
+  if (isNative) {
+    // Show welcome screen when not signed in
+    if (!user && !authLoading) {
+      return <NativeWelcome />;
+    }
+
+    // Loading state
+    if (authLoading) {
+      return (
+        <div
+          className="min-h-screen flex items-center justify-center"
+          style={{ backgroundColor: "var(--bg-primary)" }}
+        >
+          <Image
+            src={
+              theme === "dark"
+                ? "/images/logo-nav-dark.png"
+                : "/images/logo-nav-light.png"
+            }
+            alt="GiveTime"
+            width={120}
+            height={36}
+            priority
+            unoptimized
+          />
+        </div>
+      );
+    }
+
+    // Signed-in native layout
+    return (
+      <>
+        {/* Minimal native header */}
+        <header
+          className="sticky top-0 z-50 backdrop-blur-md safe-top"
+          style={{
+            backgroundColor:
+              theme === "dark"
+                ? "rgba(18, 18, 18, 0.9)"
+                : "rgba(253, 252, 250, 0.9)",
+            borderBottom: "1px solid var(--border-color)",
+          }}
+        >
+          <div className="h-12 flex items-center justify-center">
+            <Image
+              src={
+                theme === "dark"
+                  ? "/images/logo-nav-dark.png"
+                  : "/images/logo-nav-light.png"
+              }
+              alt="GiveTime"
+              width={110}
+              height={32}
+              className="h-6 w-auto"
+              priority
+              unoptimized
+            />
+          </div>
+        </header>
+
+        {/* Content area with bottom padding for tab bar */}
+        <div style={{ paddingBottom: "calc(56px + env(safe-area-inset-bottom, 0px))" }}>
+          {activeTab === "browse" && (
+            <>
+              <FilterBar
+                search={search}
+                onSearchChange={setSearch}
+                selectedType={selectedType}
+                onTypeChange={setSelectedType}
+                selectedFormat={selectedFormat}
+                onFormatChange={setSelectedFormat}
+                selectedCounty={selectedCounty}
+                onCountyChange={setSelectedCounty}
+                age={age}
+                onAgeChange={setAge}
+                tracksHoursOnly={tracksHoursOnly}
+                onTracksHoursChange={setTracksHoursOnly}
+                resultCount={filtered.length}
+                totalCount={allOrgs.length}
+              />
+              {orgGrid}
+            </>
+          )}
+
+          {activeTab === "hours" && (
+            <section
+              className="py-6"
+              style={{ backgroundColor: "var(--bg-primary)" }}
+            >
+              <MyHours />
+            </section>
+          )}
+
+          {activeTab === "profile" && <ProfileTab />}
+        </div>
+
+        <NativeTabBar activeTab={activeTab} onTabChange={setActiveTab} />
+      </>
+    );
+  }
+
+  // ─── WEB LAYOUT (unchanged) ──────────────────────────────
   return (
     <>
       <Header
-        activeTab={activeTab}
-        onTabChange={user ? setActiveTab : undefined}
+        activeTab={activeTab === "profile" ? "browse" : activeTab}
+        onTabChange={user ? (tab) => setActiveTab(tab) : undefined}
       />
 
       {activeTab === "browse" || !user ? (
@@ -137,7 +306,6 @@ export default function Home() {
                 {/* Auth gate after preview cards */}
                 {!user && allOrgs.length > PREVIEW_LIMIT && (
                   <div className="relative mt-4">
-                    {/* Fade overlay on last row */}
                     <div
                       className="absolute -top-24 left-0 right-0 h-24 pointer-events-none"
                       style={{
