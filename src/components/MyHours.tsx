@@ -304,26 +304,30 @@ export default function MyHours() {
     <>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-12">
         {/* Header area */}
-        <div className="flex items-center justify-between mb-8 pt-2">
-          <div>
-            <h1
-              className="text-2xl sm:text-3xl font-bold"
-              style={{ fontFamily: "'Sora', sans-serif", color: "var(--text-primary)" }}
-            >
-              Hey, {firstName}
-            </h1>
-            <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
-              {logs.length === 0
-                ? "Log your first volunteer hours to get started."
-                : `You've logged ${analytics.totalHours.toFixed(1)} hours across ${analytics.uniqueOrgs} organization${analytics.uniqueOrgs !== 1 ? "s" : ""}.`}
-            </p>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
+        <div className="mb-8 pt-2">
+          <h1
+            className="text-2xl sm:text-3xl font-bold"
+            style={{ fontFamily: "'Sora', sans-serif", color: "var(--text-primary)" }}
+          >
+            Hey, {firstName}
+          </h1>
+          <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
+            {logs.length === 0
+              ? "Log your first volunteer hours to get started."
+              : (
+                <>
+                  {`You've logged ${analytics.totalHours.toFixed(1)} hours`}
+                  <br />
+                  {`across ${analytics.uniqueOrgs} organization${analytics.uniqueOrgs !== 1 ? "s" : ""}.`}
+                </>
+              )}
+          </p>
+          <div className="flex items-center gap-2 mt-3">
             {logs.length > 0 && (
               <>
                 <button
                   onClick={() => exportCSV(logs, profile?.display_name ?? "")}
-                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
                   style={{
                     color: "var(--text-secondary)",
                     border: "1px solid var(--border-color)",
@@ -331,18 +335,18 @@ export default function MyHours() {
                   }}
                   title="Export all entries as CSV"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
                   </svg>
-                  <span className="hidden sm:inline">CSV</span>
+                  CSV
                 </button>
                 <button
                   onClick={() =>
                     exportPDF(logs, analytics, profile?.display_name ?? "")
                   }
-                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
                   style={{
                     color: "var(--text-secondary)",
                     border: "1px solid var(--border-color)",
@@ -350,12 +354,12 @@ export default function MyHours() {
                   }}
                   title="Export summary report as PDF"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
                   </svg>
-                  <span className="hidden sm:inline">PDF</span>
+                  PDF
                 </button>
               </>
             )}
@@ -371,7 +375,7 @@ export default function MyHours() {
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              <span className="hidden sm:inline">Log hours</span>
+              Log hours
             </button>
           </div>
         </div>

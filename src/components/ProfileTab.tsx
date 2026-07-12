@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "./AuthProvider";
 import { useTheme } from "./ThemeProvider";
 
 export default function ProfileTab() {
   const { user, profile, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   const initials = profile?.display_name
     ? profile.display_name
@@ -15,6 +18,11 @@ export default function ProfileTab() {
         .toUpperCase()
         .slice(0, 2)
     : "?";
+
+  const handleSignOut = () => {
+    signOut();
+    setShowSignOutConfirm(false);
+  };
 
   return (
     <div className="px-5 py-6">
@@ -80,7 +88,7 @@ export default function ProfileTab() {
           </div>
           <button
             onClick={toggleTheme}
-            className="relative w-12 h-7 rounded-full transition-colors"
+            className="relative w-[50px] h-[30px] rounded-full transition-colors"
             style={{
               backgroundColor:
                 theme === "dark" ? "var(--green-primary)" : "#D1D5DB",
@@ -88,17 +96,17 @@ export default function ProfileTab() {
             aria-label="Toggle dark mode"
           >
             <span
-              className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-200"
+              className="absolute top-[3px] left-[3px] w-[24px] h-[24px] rounded-full bg-white shadow-sm transition-transform duration-200"
               style={{
                 transform:
-                  theme === "dark" ? "translateX(22px)" : "translateX(2px)",
+                  theme === "dark" ? "translateX(20px)" : "translateX(0px)",
               }}
             />
           </button>
         </div>
 
         {/* Submit an organization */}
-        <a
+        <Link
           href="/submit"
           className="flex items-center justify-between px-4 py-3.5"
           style={{
@@ -133,7 +141,7 @@ export default function ProfileTab() {
           >
             <polyline points="9 18 15 12 9 6" />
           </svg>
-        </a>
+        </Link>
 
         {/* Our website */}
         <a
@@ -179,7 +187,7 @@ export default function ProfileTab() {
 
         {/* Sign out */}
         <button
-          onClick={signOut}
+          onClick={() => setShowSignOutConfirm(true)}
           className="w-full flex items-center gap-3 px-4 py-3.5"
         >
           <svg
@@ -215,6 +223,59 @@ export default function ProfileTab() {
           &copy; 2024-2026 GiveTime by Aarush Arun
         </p>
       </div>
+
+      {/* Sign out confirmation modal */}
+      {showSignOutConfirm && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-6"
+          onClick={() => setShowSignOutConfirm(false)}
+        >
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div
+            className="relative w-full max-w-xs rounded-2xl p-6 text-center"
+            style={{
+              backgroundColor: "var(--bg-card)",
+              border: "1px solid var(--border-color)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3
+              className="text-lg font-bold mb-2"
+              style={{
+                fontFamily: "'Sora', sans-serif",
+                color: "var(--text-primary)",
+              }}
+            >
+              Sign out?
+            </h3>
+            <p
+              className="text-sm mb-6"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Are you sure you want to sign out of GiveTime?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowSignOutConfirm(false)}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                style={{
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border-color)",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSignOut}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+                style={{ backgroundColor: "#EF4444" }}
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

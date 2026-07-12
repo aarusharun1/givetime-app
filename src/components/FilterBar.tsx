@@ -149,30 +149,6 @@ export default function FilterBar({
             />
           </div>
 
-          {/* Age input */}
-          <div className="flex items-center gap-2 shrink-0">
-            <label
-              className="text-sm font-inter whitespace-nowrap"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              My age:
-            </label>
-            <input
-              type="number"
-              placeholder="--"
-              value={age}
-              onChange={(e) => onAgeChange(e.target.value)}
-              min="5"
-              max="99"
-              className="w-16 px-3 py-2.5 rounded-lg text-sm font-inter text-center transition-colors"
-              style={{
-                backgroundColor: "var(--bg-card)",
-                border: "1px solid var(--border-color)",
-                color: "var(--text-primary)",
-              }}
-            />
-          </div>
-
           {/* Format dropdown */}
           <select
             value={selectedFormat}
@@ -191,8 +167,8 @@ export default function FilterBar({
             ))}
           </select>
 
-          {/* County dropdown + Near Me */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* County dropdown + Near Me + Age */}
+          <div className="flex items-center gap-2 shrink-0 flex-wrap">
             <select
               value={selectedCounty}
               onChange={(e) => handleCountyChange(e.target.value)}
@@ -226,6 +202,28 @@ export default function FilterBar({
                 <circle cx="12" cy="9" r="2.5" />
               </svg>
             </button>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <label
+                className="text-sm font-inter whitespace-nowrap"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                Age:
+              </label>
+              <input
+                type="number"
+                placeholder="--"
+                value={age}
+                onChange={(e) => onAgeChange(e.target.value)}
+                min="5"
+                max="99"
+                className="w-14 px-2 py-2.5 rounded-lg text-sm font-inter text-center transition-colors"
+                style={{
+                  backgroundColor: "var(--bg-card)",
+                  border: "1px solid var(--border-color)",
+                  color: "var(--text-primary)",
+                }}
+              />
+            </div>
           </div>
         </div>
 
