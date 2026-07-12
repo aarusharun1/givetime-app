@@ -10,6 +10,7 @@ import {
 } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase, Profile } from "@/lib/supabase";
+import { isNativePlatform } from "@/lib/platform";
 
 interface AuthContextType {
   user: User | null;
@@ -66,6 +67,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [fetchProfile]);
 
+  // Listen for deep link callbacks from OAuth in native apps
+  useEffect(() => {
+    if (!isNativePlatform()) return;
+
+    let cleanup: (() => void) | undefined;
+
+    const setupDeepLinks = async () => {
+      try {
+        const { App: CapApp } = await import("@capacitor/app");
+
+        const listener = await CapApp.addListener("appUrlOpen", async ({ url }) => {
+          // Check if this is an auth callback
+          if (url.includes("auth-callback")) {
+            // The URL contains tokens in the hash fragment
+            const hashPart = url.split("#")[1];
+            if (hashPart) {
+              const params = new URLSearchParams(hashPart);
+              const accessToken = params.get("access_token");
+              const refreshToken = params.get("refresh_token");
+
+              if (accessToken && refreshToken) {
+                await supabase.auth.setSession({
+                  access_token: accessToken,
+                  refresh_token: refreshToken,
+                });
+              }
+            }
+
+            // Close the in-app browser
+            try {
+              const { Browser } = await import("@capacitor/browser");
+              await Browser.close();
+            } catch {
+              // Browser plugin may not be available
+            }
+          }
+        });
+
+        cleanup = () => listener.remove();
+      } catch {
+        // Capacitor plugins not available (running on web)
+      }
+    };
+
+    setupDeepLinks();
+    return () => cleanup?.();
+  }, []);
+
   const signInWithEmail = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -90,13 +139,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-    return { error: error?.message ?? null };
+    if (isNativePlatform()) {
+      // Native: open OAuth in in-app browser, redirect back via deep link
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: "co.givetime.app://auth-callback",
+          skipBrowserRedirect: true,
+        },
+      });
+
+      if (error) return { error: error.message };
+
+      if (data?.url) {
+        try {
+          const { Browser } = await import("@capacitor/browser");
+          await Browser.open({ url: data.url });
+        } catch {
+          return { error: "Could not open browser for sign-in." };
+        }
+      }
+
+      return { error: null };
+    } else {
+      // Web: normal redirect-based OAuth
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+      return { error: error?.message ?? null };
+    }
   };
 
   const signOut = async () => {

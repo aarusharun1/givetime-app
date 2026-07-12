@@ -29,7 +29,7 @@ export default function Header({ activeTab = "browse", onTabChange }: HeaderProp
   return (
     <>
       <header
-        className="sticky top-0 z-50 backdrop-blur-md"
+        className="sticky top-0 z-50 backdrop-blur-md safe-top"
         style={{
           backgroundColor:
             theme === "dark"

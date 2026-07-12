@@ -95,6 +95,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* iOS safe area support (Capacitor) */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
