@@ -77,38 +77,55 @@ export default function NativeTabBar({
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 flex justify-center"
+      className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
       style={{
-        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
-        paddingLeft: "16px",
-        paddingRight: "16px",
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 14px)",
+        paddingLeft: "20px",
+        paddingRight: "20px",
       }}
     >
       <nav
-        className="w-full max-w-md flex items-center justify-around"
+        className="w-full max-w-md flex items-center justify-around pointer-events-auto"
         style={{
+          position: "relative",
           backgroundColor: isDark
-            ? "rgba(30, 30, 30, 0.85)"
-            : "rgba(220, 220, 220, 0.75)",
-          backdropFilter: "blur(20px) saturate(180%)",
-          WebkitBackdropFilter: "blur(20px) saturate(180%)",
-          borderRadius: "28px",
-          padding: "6px",
+            ? "rgba(38, 38, 40, 0.55)"
+            : "rgba(245, 245, 247, 0.45)",
+          backdropFilter: "blur(40px) saturate(200%) brightness(1.1)",
+          WebkitBackdropFilter: "blur(40px) saturate(200%) brightness(1.1)",
+          borderRadius: "26px",
+          padding: "5px",
           border: isDark
-            ? "1px solid rgba(255, 255, 255, 0.08)"
-            : "1px solid rgba(0, 0, 0, 0.06)",
+            ? "0.5px solid rgba(255, 255, 255, 0.12)"
+            : "0.5px solid rgba(255, 255, 255, 0.6)",
           boxShadow: isDark
-            ? "0 8px 32px rgba(0, 0, 0, 0.4)"
-            : "0 8px 32px rgba(0, 0, 0, 0.12)",
+            ? "0 4px 24px rgba(0, 0, 0, 0.35), inset 0 0.5px 0 rgba(255, 255, 255, 0.06)"
+            : "0 4px 24px rgba(0, 0, 0, 0.08), inset 0 0.5px 0 rgba(255, 255, 255, 0.8)",
+          overflow: "hidden",
         }}
       >
+        {/* Specular highlight at top edge */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "10%",
+            right: "10%",
+            height: "1px",
+            background: isDark
+              ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)"
+              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent)",
+            pointerEvents: "none",
+          }}
+        />
+
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className="relative flex flex-col items-center gap-0.5 transition-colors duration-200"
+              className="relative flex flex-col items-center gap-0.5"
               style={{
                 flex: 1,
                 padding: "8px 0",
@@ -116,13 +133,19 @@ export default function NativeTabBar({
                 color: isActive
                   ? "var(--green-primary)"
                   : isDark
-                  ? "rgba(255, 255, 255, 0.5)"
-                  : "rgba(0, 0, 0, 0.4)",
+                  ? "rgba(255, 255, 255, 0.45)"
+                  : "rgba(0, 0, 0, 0.35)",
                 backgroundColor: isActive
                   ? isDark
-                    ? "rgba(255, 255, 255, 0.08)"
-                    : "rgba(255, 255, 255, 0.7)"
+                    ? "rgba(255, 255, 255, 0.1)"
+                    : "rgba(255, 255, 255, 0.55)"
                   : "transparent",
+                boxShadow: isActive
+                  ? isDark
+                    ? "inset 0 0.5px 0 rgba(255,255,255,0.08), 0 1px 3px rgba(0,0,0,0.15)"
+                    : "inset 0 0.5px 0 rgba(255,255,255,0.9), 0 1px 3px rgba(0,0,0,0.06)"
+                  : "none",
+                transition: "all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",
               }}
             >
               {tab.icon}
