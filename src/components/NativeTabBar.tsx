@@ -73,36 +73,72 @@ export default function NativeTabBar({
     },
   ];
 
+  const isDark = theme === "dark";
+
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-md"
+    <div
+      className="fixed bottom-0 left-0 right-0 z-50 flex justify-center"
       style={{
-        backgroundColor:
-          theme === "dark"
-            ? "rgba(18, 18, 18, 0.95)"
-            : "rgba(253, 252, 250, 0.95)",
-        borderTop: "1px solid var(--border-color)",
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
+        paddingLeft: "16px",
+        paddingRight: "16px",
       }}
     >
-      <div className="flex items-center justify-around h-14">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            className="flex flex-col items-center gap-0.5 px-6 py-1 transition-colors"
-            style={{
-              color:
-                activeTab === tab.id
+      <nav
+        className="w-full max-w-md flex items-center justify-around"
+        style={{
+          backgroundColor: isDark
+            ? "rgba(30, 30, 30, 0.85)"
+            : "rgba(220, 220, 220, 0.75)",
+          backdropFilter: "blur(20px) saturate(180%)",
+          WebkitBackdropFilter: "blur(20px) saturate(180%)",
+          borderRadius: "28px",
+          padding: "6px",
+          border: isDark
+            ? "1px solid rgba(255, 255, 255, 0.08)"
+            : "1px solid rgba(0, 0, 0, 0.06)",
+          boxShadow: isDark
+            ? "0 8px 32px rgba(0, 0, 0, 0.4)"
+            : "0 8px 32px rgba(0, 0, 0, 0.12)",
+        }}
+      >
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className="relative flex flex-col items-center gap-0.5 transition-colors duration-200"
+              style={{
+                flex: 1,
+                padding: "8px 0",
+                borderRadius: "22px",
+                color: isActive
                   ? "var(--green-primary)"
-                  : "var(--text-muted)",
-            }}
-          >
-            {tab.icon}
-            <span className="text-[10px] font-medium">{tab.label}</span>
-          </button>
-        ))}
-      </div>
-    </nav>
+                  : isDark
+                  ? "rgba(255, 255, 255, 0.5)"
+                  : "rgba(0, 0, 0, 0.4)",
+                backgroundColor: isActive
+                  ? isDark
+                    ? "rgba(255, 255, 255, 0.08)"
+                    : "rgba(255, 255, 255, 0.7)"
+                  : "transparent",
+              }}
+            >
+              {tab.icon}
+              <span
+                className="font-medium"
+                style={{
+                  fontSize: "10px",
+                  fontFamily: "'Sora', sans-serif",
+                }}
+              >
+                {tab.label}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
+    </div>
   );
 }
