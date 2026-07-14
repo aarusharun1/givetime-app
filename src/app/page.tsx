@@ -202,6 +202,7 @@ export default function Home() {
                 onTracksHoursChange={setTracksHoursOnly}
                 resultCount={filtered.length}
                 totalCount={allOrgs.length}
+                collapsible
               />
               {orgGrid}
             </>
