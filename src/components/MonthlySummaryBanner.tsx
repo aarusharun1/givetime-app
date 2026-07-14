@@ -38,12 +38,23 @@ export default function MonthlySummaryBanner() {
     checkLogs();
   }, [user, startDate, endDate]);
 
+  useEffect(() => {
+    const dismissedMonth = localStorage.getItem("givetime-summary-dismissed");
+    if (dismissedMonth === monthName) setDismissed(true);
+  }, [monthName]);
+
   if (!hasLogs || dismissed) return null;
+
+  const handleTap = () => {
+    localStorage.setItem("givetime-summary-dismissed", monthName);
+    setDismissed(true);
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3">
       <Link
         href="/summary"
+        onClick={handleTap}
         className="flex items-center justify-between px-4 py-3 rounded-xl transition-colors"
         style={{
           backgroundColor: "var(--green-light)",
