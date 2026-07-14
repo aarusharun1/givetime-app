@@ -10,6 +10,7 @@ import AuthModal from "@/components/AuthModal";
 import NativeWelcome from "@/components/NativeWelcome";
 import NativeTabBar from "@/components/NativeTabBar";
 import ProfileTab from "@/components/ProfileTab";
+import MonthlySummaryBanner from "@/components/MonthlySummaryBanner";
 import { useAuth } from "@/components/AuthProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { useOrganizations } from "@/lib/useOrganizations";
@@ -202,6 +203,7 @@ export default function Home() {
         <div style={{ paddingBottom: "calc(56px + env(safe-area-inset-bottom, 0px))" }}>
           {activeTab === "browse" && (
             <>
+              <MonthlySummaryBanner />
               <FilterBar
                 search={search}
                 onSearchChange={setSearch}

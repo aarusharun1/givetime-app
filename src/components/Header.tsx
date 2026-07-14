@@ -203,6 +203,14 @@ export default function Header({ activeTab = "browse", onTabChange }: HeaderProp
                           >
                             Info
                           </a>
+                          <a
+                            href="/summary"
+                            onClick={() => setShowUserMenu(false)}
+                            className="block w-full text-left px-4 py-2 text-sm hover:opacity-70"
+                            style={{ color: "var(--text-primary)" }}
+                          >
+                            Monthly summary
+                          </a>
                           <button
                             onClick={() => {
                               signOut();

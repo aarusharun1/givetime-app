@@ -204,6 +204,45 @@ export default function ProfileTab() {
           </svg>
         </a>
 
+        {/* Monthly Summary */}
+        <Link
+          href="/summary"
+          className="flex items-center justify-between px-4 py-3.5"
+          style={{
+            borderBottom: "1px solid var(--border-color)",
+            color: "var(--text-primary)",
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--text-secondary)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span className="text-sm font-medium">Monthly summary</span>
+          </div>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--text-muted)"
+            strokeWidth="2"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </Link>
+
         {/* Sign out */}
         <button
           onClick={() => setShowSignOutConfirm(true)}
