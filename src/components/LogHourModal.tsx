@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { useOrganizations } from "@/lib/useOrganizations";
+import { hapticSuccess } from "@/lib/haptics";
 import { ORG_TYPES } from "@/data/types";
 
 interface LogHourModalProps {
@@ -109,6 +110,7 @@ export default function LogHourModal({
     setCustomOrgType("Community");
     setSelectedOrgSlug(preselectedOrg?.slug ?? "");
     setDate(new Date().toISOString().split("T")[0]);
+    hapticSuccess();
     onLogged();
     onClose();
   };

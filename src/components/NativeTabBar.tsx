@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "./ThemeProvider";
+import { hapticLight } from "@/lib/haptics";
 
 interface NativeTabBarProps {
   activeTab: "browse" | "hours" | "profile";
@@ -79,7 +80,7 @@ export default function NativeTabBar({
     <div
       className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
       style={{
-        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 4px)",
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 14px)",
         paddingLeft: "20px",
         paddingRight: "20px",
       }}
@@ -124,7 +125,10 @@ export default function NativeTabBar({
           return (
             <button
               key={tab.id}
-              onClick={() => onTabChange(tab.id)}
+              onClick={() => {
+                onTabChange(tab.id);
+                hapticLight();
+              }}
               className="relative flex flex-col items-center gap-0.5"
               style={{
                 flex: 1,

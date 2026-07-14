@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ORG_TYPES, FORMATS, COUNTIES } from "@/data/types";
+import { hapticLight } from "@/lib/haptics";
 
 interface FilterBarProps {
   search: string;
@@ -350,7 +351,10 @@ export default function FilterBar({
           {/* Filter toggle button (collapsible mode only) */}
           {collapsible && (
             <button
-              onClick={() => setFiltersOpen(!filtersOpen)}
+              onClick={() => {
+                setFiltersOpen(!filtersOpen);
+                hapticLight();
+              }}
               className="relative flex items-center justify-center w-10 h-10 rounded-lg shrink-0 transition-colors"
               style={{
                 backgroundColor: filtersOpen ? "var(--green-primary)" : "var(--bg-card)",
