@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { isNativePlatform } from "@/lib/platform";
 
 type Theme = "light" | "dark";
 
@@ -24,6 +25,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem("givetime-theme") as Theme | null;
     if (stored) {
       setTheme(stored);
+    } else if (isNativePlatform()) {
+      // Default to dark mode on native iOS app
+      setTheme("dark");
     } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       setTheme("dark");
     }

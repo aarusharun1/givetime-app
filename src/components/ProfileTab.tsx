@@ -5,6 +5,25 @@ import Link from "next/link";
 import { useAuth } from "./AuthProvider";
 import { useTheme } from "./ThemeProvider";
 
+function Tag({
+  label,
+  bg,
+  text,
+}: {
+  label: string;
+  bg: string;
+  text: string;
+}) {
+  return (
+    <span
+      className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium"
+      style={{ backgroundColor: bg, color: text }}
+    >
+      {label}
+    </span>
+  );
+}
+
 export default function ProfileTab() {
   const { user, profile, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -55,7 +74,7 @@ export default function ProfileTab() {
 
       {/* Settings */}
       <div
-        className="rounded-2xl overflow-hidden"
+        className="rounded-2xl overflow-hidden mb-6"
         style={{
           backgroundColor: "var(--bg-card)",
           border: "1px solid var(--border-color)",
@@ -210,8 +229,128 @@ export default function ProfileTab() {
         </button>
       </div>
 
+      {/* Info section: what the tags mean */}
+      <div className="mb-6">
+        <h3
+          className="text-sm font-bold mb-3"
+          style={{
+            fontFamily: "'Sora', sans-serif",
+            color: "var(--text-primary)",
+          }}
+        >
+          Understanding the tags
+        </h3>
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{
+            backgroundColor: "var(--bg-card)",
+            border: "1px solid var(--border-color)",
+          }}
+        >
+          {/* Category */}
+          <div
+            className="px-4 py-3.5"
+            style={{ borderBottom: "1px solid var(--border-color)" }}
+          >
+            <div className="mb-1.5">
+              <Tag
+                label="Community"
+                bg="var(--tag-type-bg)"
+                text="var(--tag-type-text)"
+              />
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              The category tag describes the type of cause or work the
+              organization focuses on, such as community service, tutoring,
+              health, environment, and more.
+            </p>
+          </div>
+
+          {/* Format */}
+          <div
+            className="px-4 py-3.5"
+            style={{ borderBottom: "1px solid var(--border-color)" }}
+          >
+            <div className="flex gap-1.5 mb-1.5">
+              <Tag
+                label="In Person"
+                bg="var(--tag-format-inperson-bg)"
+                text="var(--tag-format-inperson-text)"
+              />
+              <Tag
+                label="Online"
+                bg="var(--tag-format-online-bg)"
+                text="var(--tag-format-online-text)"
+              />
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              The format tag tells you whether the volunteer opportunity is
+              done in person at a physical location, done remotely online,
+              or a mix of both. This helps you find options that fit your
+              schedule and preferences.
+            </p>
+          </div>
+
+          {/* Location / County */}
+          <div
+            className="px-4 py-3.5"
+            style={{ borderBottom: "1px solid var(--border-color)" }}
+          >
+            <div className="mb-1.5">
+              <Tag
+                label="Oakland"
+                bg="var(--tag-county-bg)"
+                text="var(--tag-county-text)"
+              />
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              The location tag shows which county in Southeast Michigan the
+              organization operates in. Organizations that serve multiple
+              areas or are available online are tagged accordingly.
+            </p>
+          </div>
+
+          {/* Tracks Hours */}
+          <div
+            className="px-4 py-3.5"
+            style={{ borderBottom: "1px solid var(--border-color)" }}
+          >
+            <div className="mb-1.5">
+              <Tag
+                label="Tracks hours"
+                bg="var(--tag-tracks-bg)"
+                text="var(--tag-tracks-text)"
+              />
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              This tag means the organization specifically mentions that they
+              track and certify volunteer hours. They may provide verification
+              letters, digital hour logs, or signed forms that you can use for
+              school requirements, college applications, or service awards.
+            </p>
+          </div>
+
+          {/* Age */}
+          <div className="px-4 py-3.5">
+            <div className="mb-1.5">
+              <Tag
+                label="15+"
+                bg="var(--tag-age-bg)"
+                text="var(--tag-age-text)"
+              />
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              The age tag shows any minimum age requirement that the
+              organization sets for its volunteers. If no age tag is shown,
+              the organization either accepts all ages or does not specify
+              a minimum on their website.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Footer */}
-      <div className="mt-10 text-center">
+      <div className="mt-4 text-center">
         <p
           className="text-xs leading-relaxed"
           style={{ color: "var(--text-muted)" }}
