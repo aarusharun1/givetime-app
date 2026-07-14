@@ -3,11 +3,38 @@
 import { Organization } from "@/data/types";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { hapticLight, nativeShare } from "@/lib/haptics";
+import { hapticLight, hapticSuccess, nativeShare } from "@/lib/haptics";
 import { isNativePlatform } from "@/lib/platform";
 
 interface OrgCardProps {
   org: Organization;
+}
+
+async function scheduleReminder(orgName: string, dateTime: Date, orgSlug: string) {
+  try {
+    const { LocalNotifications } = await import("@capacitor/local-notifications");
+    // Generate a unique ID from slug (simple hash)
+    let id = 2000;
+    for (let i = 0; i < orgSlug.length; i++) {
+      id += orgSlug.charCodeAt(i);
+    }
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id,
+          title: "GiveTime Reminder",
+          body: `Volunteer shift at ${orgName} today`,
+          schedule: {
+            at: dateTime,
+            allowWhileIdle: true,
+          },
+        },
+      ],
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // Format badge colors - use CSS variables for dark mode support
@@ -23,6 +50,10 @@ function getFormatStyle(format: string) {
 
 export default function OrgCard({ org }: OrgCardProps) {
   const [open, setOpen] = useState(false);
+  const [showReminder, setShowReminder] = useState(false);
+  const [reminderDate, setReminderDate] = useState("");
+  const [reminderTime, setReminderTime] = useState("09:00");
+  const [reminderSet, setReminderSet] = useState(false);
   const hasImage = Boolean(org.image && org.image.trim());
   const formatStyle = getFormatStyle(org.format);
 
@@ -314,25 +345,50 @@ export default function OrgCard({ org }: OrgCardProps) {
                   </svg>
                 </a>
                 {isNativePlatform() && (
-                  <button
-                    onClick={async () => {
-                      hapticLight();
-                      await nativeShare(
-                        org.name,
-                        `Check out ${org.name} on GiveTime`,
-                        `https://app.givetime.co/org/${org.slug}`
-                      );
-                    }}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-inter transition-colors"
-                    style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
-                  >
-                    Share
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                      <polyline points="16 6 12 2 8 6" />
-                      <line x1="12" y1="2" x2="12" y2="15" />
-                    </svg>
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        hapticLight();
+                        setShowReminder(!showReminder);
+                        setReminderSet(false);
+                        if (!reminderDate) {
+                          const tomorrow = new Date();
+                          tomorrow.setDate(tomorrow.getDate() + 1);
+                          setReminderDate(tomorrow.toISOString().split("T")[0]);
+                        }
+                      }}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-inter transition-colors"
+                      style={{
+                        color: showReminder ? "var(--green-primary)" : "var(--text-secondary)",
+                        border: showReminder ? "1px solid var(--green-primary)" : "1px solid var(--border-color)",
+                      }}
+                    >
+                      Remind me
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={async () => {
+                        hapticLight();
+                        await nativeShare(
+                          org.name,
+                          `Check out ${org.name} on GiveTime`,
+                          `https://app.givetime.co/org/${org.slug}`
+                        );
+                      }}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-inter transition-colors"
+                      style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
+                    >
+                      Share
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                        <polyline points="16 6 12 2 8 6" />
+                        <line x1="12" y1="2" x2="12" y2="15" />
+                      </svg>
+                    </button>
+                  </>
                 )}
                 <Link
                   href={`/org/${org.slug}`}
@@ -345,6 +401,76 @@ export default function OrgCard({ org }: OrgCardProps) {
                   </svg>
                 </Link>
               </div>
+
+              {/* Reminder picker (native only) */}
+              {isNativePlatform() && showReminder && (
+                <div
+                  className="mt-3 p-4 rounded-xl"
+                  style={{
+                    backgroundColor: "var(--bg-filter)",
+                    border: "1px solid var(--border-color)",
+                  }}
+                >
+                  {reminderSet ? (
+                    <div className="flex items-center gap-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-primary)" strokeWidth="2">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <p className="text-sm" style={{ color: "var(--green-primary)" }}>
+                        Reminder set!
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2 mb-3">
+                        <input
+                          type="date"
+                          value={reminderDate}
+                          onChange={(e) => setReminderDate(e.target.value)}
+                          className="flex-1 px-3 py-2 rounded-lg text-sm"
+                          style={{
+                            backgroundColor: "var(--bg-card)",
+                            border: "1px solid var(--border-color)",
+                            color: "var(--text-primary)",
+                            fontSize: "16px",
+                          }}
+                        />
+                        <input
+                          type="time"
+                          value={reminderTime}
+                          onChange={(e) => setReminderTime(e.target.value)}
+                          className="px-3 py-2 rounded-lg text-sm"
+                          style={{
+                            backgroundColor: "var(--bg-card)",
+                            border: "1px solid var(--border-color)",
+                            color: "var(--text-primary)",
+                            fontSize: "16px",
+                            width: "120px",
+                          }}
+                        />
+                      </div>
+                      <button
+                        onClick={async () => {
+                          if (!reminderDate) return;
+                          const [year, month, day] = reminderDate.split("-").map(Number);
+                          const [hour, minute] = reminderTime.split(":").map(Number);
+                          const dateTime = new Date(year, month - 1, day, hour, minute);
+                          if (dateTime <= new Date()) return;
+                          const success = await scheduleReminder(org.name, dateTime, org.slug);
+                          if (success) {
+                            hapticSuccess();
+                            setReminderSet(true);
+                          }
+                        }}
+                        className="w-full px-4 py-2 rounded-lg text-sm font-semibold text-white"
+                        style={{ backgroundColor: "var(--green-primary)" }}
+                      >
+                        Set reminder
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
