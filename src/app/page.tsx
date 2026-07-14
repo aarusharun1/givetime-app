@@ -14,6 +14,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { useOrganizations } from "@/lib/useOrganizations";
 import { isNativePlatform } from "@/lib/platform";
+import { setupNotifications, scheduleInactivityNudge } from "@/lib/notifications";
 
 const PREVIEW_LIMIT = 12;
 
@@ -35,6 +36,20 @@ export default function Home() {
   useEffect(() => {
     setIsNative(isNativePlatform());
   }, []);
+
+  // Set up notifications when native user signs in
+  useEffect(() => {
+    if (isNative && user) {
+      setupNotifications();
+    }
+  }, [isNative, user]);
+
+  // Reschedule inactivity nudge every time the app opens
+  useEffect(() => {
+    if (isNative && user) {
+      scheduleInactivityNudge();
+    }
+  }, [isNative, user]);
 
   const filtered = useMemo(() => {
     return allOrgs.filter((org) => {
