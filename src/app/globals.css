@@ -133,3 +133,10 @@ html {
 .filter-scroll::-webkit-scrollbar-thumb:active {
   background: var(--text-secondary);
 }
+
+/* Prevent iOS zoom on input focus */
+@media screen and (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
