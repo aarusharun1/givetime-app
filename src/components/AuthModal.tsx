@@ -9,7 +9,7 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const { signInWithEmail, signUpWithEmail, signInWithGoogle } = useAuth();
+  const { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -85,7 +85,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     if (googleError) {
       setError(googleError);
     }
-    // Google sign-in redirects, so no need to close modal
+  };
+
+  const handleAppleSignIn = async () => {
+    setError("");
+    const { error: appleError } = await signInWithApple();
+    if (appleError) {
+      setError(appleError);
+    }
   };
 
   return (
@@ -194,6 +201,22 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 />
               </svg>
               Continue with Google
+            </button>
+
+            {/* Apple sign-in button */}
+            <button
+              onClick={handleAppleSignIn}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-4"
+              style={{
+                backgroundColor: "var(--bg-filter)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-primary)",
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+              </svg>
+              Continue with Apple
             </button>
 
             {/* Divider */}

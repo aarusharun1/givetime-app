@@ -23,6 +23,7 @@ interface AuthContextType {
     displayName: string
   ) => Promise<{ error: string | null }>;
   signInWithGoogle: () => Promise<{ error: string | null }>;
+  signInWithApple: () => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -43,7 +44,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -52,7 +52,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -78,9 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { App: CapApp } = await import("@capacitor/app");
 
         const listener = await CapApp.addListener("appUrlOpen", async ({ url }) => {
-          // Check if this is an auth callback
           if (url.includes("auth-callback")) {
-            // The URL contains tokens in the hash fragment
             const hashPart = url.split("#")[1];
             if (hashPart) {
               const params = new URLSearchParams(hashPart);
@@ -95,20 +92,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               }
             }
 
-            // Close the in-app browser
             try {
               const { Browser } = await import("@capacitor/browser");
               await Browser.close();
-            } catch {
-              // Browser plugin may not be available
-            }
+            } catch {}
           }
         });
 
         cleanup = () => listener.remove();
-      } catch {
-        // Capacitor plugins not available (running on web)
-      }
+      } catch {}
     };
 
     setupDeepLinks();
@@ -140,7 +132,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithGoogle = async () => {
     if (isNativePlatform()) {
-      // Native: open OAuth in in-app browser, redirect back via deep link
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -162,9 +153,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return { error: null };
     } else {
-      // Web: normal redirect-based OAuth
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+      return { error: error?.message ?? null };
+    }
+  };
+
+  const signInWithApple = async () => {
+    if (isNativePlatform()) {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "apple",
+        options: {
+          redirectTo: "co.givetime.app://auth-callback",
+          skipBrowserRedirect: true,
+        },
+      });
+
+      if (error) return { error: error.message };
+
+      if (data?.url) {
+        try {
+          const { Browser } = await import("@capacitor/browser");
+          await Browser.open({ url: data.url });
+        } catch {
+          return { error: "Could not open browser for sign-in." };
+        }
+      }
+
+      return { error: null };
+    } else {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "apple",
         options: {
           redirectTo: window.location.origin,
         },
@@ -188,6 +211,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signInWithEmail,
         signUpWithEmail,
         signInWithGoogle,
+        signInWithApple,
         signOut,
       }}
     >
