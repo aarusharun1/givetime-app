@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "./AuthProvider";
-import { supabase, HourLog } from "@/lib/supabase";
+import { supabase, HourLog, Reminder } from "@/lib/supabase";
 import LogHourModal from "./LogHourModal";
 import jsPDF from "jspdf";
 
@@ -190,6 +190,7 @@ function exportPDF(
 export default function MyHours() {
   const { user, profile } = useAuth();
   const [logs, setLogs] = useState<HourLog[]>([]);
+  const [reminders, setReminders] = useState<Reminder[]>([]);
   const [loading, setLoading] = useState(true);
   const [showLogModal, setShowLogModal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -205,9 +206,26 @@ export default function MyHours() {
     setLoading(false);
   }, [user]);
 
+  const fetchReminders = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("reminders")
+      .select("*")
+      .eq("user_id", user.id)
+      .gte("reminder_date", new Date().toISOString())
+      .order("reminder_date", { ascending: true });
+    setReminders(data ?? []);
+  }, [user]);
+
   useEffect(() => {
     fetchLogs();
-  }, [fetchLogs]);
+    fetchReminders();
+  }, [fetchLogs, fetchReminders]);
+
+  const handleDeleteReminder = async (id: string) => {
+    await supabase.from("reminders").delete().eq("id", id);
+    fetchReminders();
+  };
 
   const handleDelete = async (id: string) => {
     await supabase.from("hour_logs").delete().eq("id", id);
@@ -379,6 +397,74 @@ export default function MyHours() {
             </button>
           </div>
         </div>
+
+        {/* Upcoming reminders */}
+        {reminders.length > 0 && (
+          <div
+            className="rounded-xl p-5 mb-8"
+            style={{
+              backgroundColor: "var(--bg-card)",
+              border: "1px solid var(--border-color)",
+            }}
+          >
+            <h3
+              className="text-sm font-semibold mb-3"
+              style={{ fontFamily: "'Sora', sans-serif", color: "var(--text-primary)" }}
+            >
+              Upcoming reminders
+            </h3>
+            <div className="space-y-2">
+              {reminders.map((reminder) => {
+                const d = new Date(reminder.reminder_date);
+                const dateStr = d.toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                });
+                const timeStr = d.toLocaleTimeString("en-US", {
+                  hour: "numeric",
+                  minute: "2-digit",
+                });
+                return (
+                  <div
+                    key={reminder.id}
+                    className="flex items-center justify-between p-3 rounded-xl"
+                    style={{
+                      backgroundColor: "var(--bg-filter)",
+                      border: "1px solid var(--border-color)",
+                    }}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                      </svg>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>
+                          {reminder.org_name}
+                        </p>
+                        <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+                          {dateStr} at {timeStr}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteReminder(reminder.id)}
+                      className="shrink-0 ml-2 w-7 h-7 flex items-center justify-center rounded-lg hover:opacity-70 transition-opacity"
+                      style={{ color: "var(--text-muted)" }}
+                      aria-label="Cancel reminder"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {logs.length === 0 ? (
           /* Empty state */

@@ -106,7 +106,18 @@ export default function Home() {
       ) : filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((org) => (
-            <OrgCard key={org.slug} org={org} />
+            <OrgCard
+              key={org.slug}
+              org={org}
+              onAuthRequired={() => {
+                if (isNative && !user) {
+                  setGuestMode(false);
+                  setActiveTab("browse");
+                } else {
+                  setShowAuthModal(true);
+                }
+              }}
+            />
           ))}
         </div>
       ) : (

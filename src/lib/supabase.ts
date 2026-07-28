@@ -23,3 +23,13 @@ export interface HourLog {
   notes: string;
   created_at: string;
 }
+
+export interface Reminder {
+  id: string;
+  user_id: string;
+  org_name: string;
+  org_slug: string;
+  org_type: string;
+  reminder_date: string;
+  created_at: string;
+}

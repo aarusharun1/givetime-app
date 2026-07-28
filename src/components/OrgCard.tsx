@@ -5,9 +5,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { hapticLight, hapticSuccess, nativeShare } from "@/lib/haptics";
 import { isNativePlatform } from "@/lib/platform";
+import { useAuth } from "./AuthProvider";
+import { supabase } from "@/lib/supabase";
 
 interface OrgCardProps {
   org: Organization;
+  onAuthRequired?: () => void;
 }
 
 async function scheduleReminder(orgName: string, dateTime: Date, orgSlug: string) {
@@ -48,7 +51,8 @@ function getFormatStyle(format: string) {
   return { bg: "var(--tag-format-inperson-bg)", text: "var(--tag-format-inperson-text)" };
 }
 
-export default function OrgCard({ org }: OrgCardProps) {
+export default function OrgCard({ org, onAuthRequired }: OrgCardProps) {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [showReminder, setShowReminder] = useState(false);
   const [reminderDate, setReminderDate] = useState("");
@@ -348,6 +352,10 @@ export default function OrgCard({ org }: OrgCardProps) {
                   <>
                     <button
                       onClick={() => {
+                        if (!user) {
+                          onAuthRequired?.();
+                          return;
+                        }
                         hapticLight();
                         setShowReminder(!showReminder);
                         setReminderSet(false);
@@ -451,11 +459,20 @@ export default function OrgCard({ org }: OrgCardProps) {
                       </div>
                       <button
                         onClick={async () => {
-                          if (!reminderDate) return;
+                          if (!reminderDate || !user) return;
                           const [year, month, day] = reminderDate.split("-").map(Number);
                           const [hour, minute] = reminderTime.split(":").map(Number);
                           const dateTime = new Date(year, month - 1, day, hour, minute);
                           if (dateTime <= new Date()) return;
+                          // Save to Supabase
+                          await supabase.from("reminders").insert({
+                            user_id: user.id,
+                            org_name: org.name,
+                            org_slug: org.slug,
+                            org_type: org.type,
+                            reminder_date: dateTime.toISOString(),
+                          });
+                          // Schedule local notification on native
                           const success = await scheduleReminder(org.name, dateTime, org.slug);
                           if (success) {
                             hapticSuccess();
