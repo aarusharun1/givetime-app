@@ -25,9 +25,26 @@ function Tag({
 }
 
 export default function ProfileTab() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, deleteAccount } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteInput, setDeleteInput] = useState("");
+  const [deleteError, setDeleteError] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    if (deleteInput !== "DELETE") return;
+    setDeleting(true);
+    setDeleteError("");
+    const { error } = await deleteAccount();
+    if (error) {
+      setDeleteError(error);
+      setDeleting(false);
+    } else {
+      setShowDeleteConfirm(false);
+    }
+  };
 
   const initials = profile?.display_name
     ? profile.display_name
@@ -243,6 +260,36 @@ export default function ProfileTab() {
           </svg>
         </Link>
 
+        {/* Delete account */}
+        <button
+          onClick={() => {
+            setShowDeleteConfirm(true);
+            setDeleteInput("");
+            setDeleteError("");
+          }}
+          className="w-full flex items-center gap-3 px-4 py-3.5"
+          style={{ borderBottom: "1px solid var(--border-color)" }}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#EF4444"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            <line x1="10" y1="11" x2="10" y2="17" />
+            <line x1="14" y1="11" x2="14" y2="17" />
+          </svg>
+          <span className="text-sm font-medium" style={{ color: "#EF4444" }}>
+            Delete account
+          </span>
+        </button>
+
         {/* Sign out */}
         <button
           onClick={() => setShowSignOutConfirm(true)}
@@ -449,6 +496,101 @@ export default function ProfileTab() {
                 style={{ backgroundColor: "#EF4444" }}
               >
                 Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete account confirmation modal */}
+      {showDeleteConfirm && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-6"
+          onClick={() => setShowDeleteConfirm(false)}
+        >
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div
+            className="relative w-full max-w-sm rounded-2xl p-6"
+            style={{
+              backgroundColor: "var(--bg-card)",
+              border: "1px solid var(--border-color)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3
+              className="text-lg font-bold mb-2"
+              style={{
+                fontFamily: "'Sora', sans-serif",
+                color: "#EF4444",
+              }}
+            >
+              Delete your account?
+            </h3>
+            <p
+              className="text-sm mb-1"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              This will permanently delete your account and all your data, including:
+            </p>
+            <ul
+              className="text-sm mb-4 list-disc pl-5"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              <li>Your profile information</li>
+              <li>All volunteer hour logs</li>
+              <li>Your analytics and export history</li>
+            </ul>
+            <p
+              className="text-sm mb-4"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              This action cannot be undone. Type{" "}
+              <span className="font-bold" style={{ color: "var(--text-primary)" }}>
+                DELETE
+              </span>{" "}
+              to confirm.
+            </p>
+            <input
+              type="text"
+              value={deleteInput}
+              onChange={(e) => setDeleteInput(e.target.value)}
+              placeholder="Type DELETE to confirm"
+              className="w-full px-4 py-2.5 rounded-xl text-sm mb-4"
+              style={{
+                backgroundColor: "var(--bg-primary)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-primary)",
+                fontSize: "16px",
+              }}
+              autoCapitalize="characters"
+            />
+            {deleteError && (
+              <p className="text-sm text-red-500 mb-4">{deleteError}</p>
+            )}
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                style={{
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border-color)",
+                }}
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleteInput !== "DELETE" || deleting}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+                style={{
+                  backgroundColor:
+                    deleteInput === "DELETE" && !deleting
+                      ? "#EF4444"
+                      : "#9CA3AF",
+                }}
+              >
+                {deleting ? "Deleting..." : "Delete account"}
               </button>
             </div>
           </div>

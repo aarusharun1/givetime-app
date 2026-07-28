@@ -6,7 +6,11 @@ import { useTheme } from "./ThemeProvider";
 import AuthModal from "./AuthModal";
 import Image from "next/image";
 
-export default function NativeWelcome() {
+interface NativeWelcomeProps {
+  onContinueAsGuest: () => void;
+}
+
+export default function NativeWelcome({ onContinueAsGuest }: NativeWelcomeProps) {
   const { signInWithGoogle, signInWithApple } = useAuth();
   const { theme } = useTheme();
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -143,6 +147,21 @@ export default function NativeWelcome() {
         {error && (
           <p className="text-sm text-red-500 mt-4 text-center">{error}</p>
         )}
+
+        {/* Continue as guest */}
+        <button
+          onClick={onContinueAsGuest}
+          className="mt-8 text-sm transition-opacity hover:opacity-80"
+          style={{
+            color: "var(--text-muted)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          Continue as guest
+        </button>
       </div>
 
       <AuthModal

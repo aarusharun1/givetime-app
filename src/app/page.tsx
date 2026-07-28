@@ -34,9 +34,15 @@ export default function Home() {
 
   // Detect native platform after hydration
   const [isNative, setIsNative] = useState(false);
+  const [guestMode, setGuestMode] = useState(false);
   useEffect(() => {
     setIsNative(isNativePlatform());
   }, []);
+
+  // Reset guest mode when user signs in
+  useEffect(() => {
+    if (user) setGuestMode(false);
+  }, [user]);
 
   // Set up notifications when native user signs in
   useEffect(() => {
@@ -140,9 +146,9 @@ export default function Home() {
 
   // ─── NATIVE APP LAYOUT ───────────────────────────────────
   if (isNative) {
-    // Show welcome screen when not signed in
-    if (!user && !authLoading) {
-      return <NativeWelcome />;
+    // Show welcome screen when not signed in and not in guest mode
+    if (!user && !authLoading && !guestMode) {
+      return <NativeWelcome onContinueAsGuest={() => setGuestMode(true)} />;
     }
 
     // Loading state
@@ -168,7 +174,49 @@ export default function Home() {
       );
     }
 
-    // Signed-in native layout
+    // Auth prompt shown when guest taps My Hours or Profile
+    const nativeAuthPrompt = (
+      <div className="flex flex-col items-center justify-center px-8 py-20">
+        <div
+          className="w-16 h-16 mx-auto mb-5 rounded-full flex items-center justify-center"
+          style={{ backgroundColor: "var(--green-light)" }}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green-primary)" strokeWidth="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <h2
+          className="text-lg font-bold mb-2 text-center"
+          style={{ fontFamily: "'Sora', sans-serif", color: "var(--text-primary)" }}
+        >
+          Sign in to access {activeTab === "hours" ? "My Hours" : "your profile"}
+        </h2>
+        <p
+          className="text-sm mb-6 text-center max-w-xs"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          {activeTab === "hours"
+            ? "Create a free account to log your volunteer hours, view analytics, and export reports."
+            : "Create a free account to manage your profile, submit organizations, and view your monthly summary."}
+        </p>
+        <button
+          onClick={() => {
+            setGuestMode(false);
+            setActiveTab("browse");
+          }}
+          className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white"
+          style={{
+            backgroundColor: "var(--green-primary)",
+            fontFamily: "'Sora', sans-serif",
+          }}
+        >
+          Sign in
+        </button>
+      </div>
+    );
+
+    // Native layout (signed in or guest)
     return (
       <>
         {/* Minimal native header */}
@@ -182,7 +230,7 @@ export default function Home() {
             borderBottom: "1px solid var(--border-color)",
           }}
         >
-          <div className="h-12 flex items-center justify-center">
+          <div className="h-12 flex items-center justify-center relative">
             <Image
               src={
                 theme === "dark"
@@ -196,6 +244,22 @@ export default function Home() {
               priority
               unoptimized
             />
+            {/* Sign in button for guests */}
+            {!user && (
+              <button
+                onClick={() => {
+                  setGuestMode(false);
+                  setActiveTab("browse");
+                }}
+                className="absolute right-4 px-3 py-1 rounded-lg text-xs font-semibold text-white"
+                style={{
+                  backgroundColor: "var(--green-primary)",
+                  fontFamily: "'Sora', sans-serif",
+                }}
+              >
+                Sign in
+              </button>
+            )}
           </div>
         </header>
 
@@ -203,7 +267,7 @@ export default function Home() {
         <div style={{ paddingBottom: "calc(56px + env(safe-area-inset-bottom, 0px))" }}>
           {activeTab === "browse" && (
             <>
-              <MonthlySummaryBanner />
+              {user && <MonthlySummaryBanner />}
               <FilterBar
                 search={search}
                 onSearchChange={setSearch}
@@ -226,18 +290,25 @@ export default function Home() {
           )}
 
           {activeTab === "hours" && (
-            <section
-              className="py-6"
-              style={{ backgroundColor: "var(--bg-primary)" }}
-            >
-              <MyHours />
-            </section>
+            user ? (
+              <section
+                className="py-6"
+                style={{ backgroundColor: "var(--bg-primary)" }}
+              >
+                <MyHours />
+              </section>
+            ) : (
+              nativeAuthPrompt
+            )
           )}
 
-          {activeTab === "profile" && <ProfileTab />}
+          {activeTab === "profile" && (
+            user ? <ProfileTab /> : nativeAuthPrompt
+          )}
         </div>
 
         <NativeTabBar activeTab={activeTab} onTabChange={setActiveTab} />
+        <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       </>
     );
   }

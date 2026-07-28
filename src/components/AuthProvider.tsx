@@ -25,6 +25,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<{ error: string | null }>;
   signInWithApple: () => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
+  deleteAccount: () => Promise<{ error: string | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -196,6 +197,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const deleteAccount = async () => {
+    try {
+      const { error } = await supabase.rpc("delete_user_account");
+      if (error) return { error: error.message };
+      // User is already deleted from auth.users, so signOut may fail.
+      // That's fine — just clear local state.
+      try { await supabase.auth.signOut(); } catch {}
+      setUser(null);
+      setProfile(null);
+      return { error: null };
+    } catch {
+      return { error: "Something went wrong. Please try again." };
+    }
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -213,6 +229,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signInWithGoogle,
         signInWithApple,
         signOut,
+        deleteAccount,
       }}
     >
       {children}
