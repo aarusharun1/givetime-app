@@ -11,6 +11,7 @@ import {
 import { User, Session } from "@supabase/supabase-js";
 import { supabase, Profile } from "@/lib/supabase";
 import { isNativePlatform } from "@/lib/platform";
+import { signInWithGoogleNative, signInWithAppleNative } from "@/lib/nativeAuth";
 
 interface AuthContextType {
   user: User | null;
@@ -133,26 +134,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithGoogle = async () => {
     if (isNativePlatform()) {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "co.givetime.app://auth-callback",
-          skipBrowserRedirect: true,
-        },
-      });
-
-      if (error) return { error: error.message };
-
-      if (data?.url) {
-        try {
-          const { Browser } = await import("@capacitor/browser");
-          await Browser.open({ url: data.url });
-        } catch {
-          return { error: "Could not open browser for sign-in." };
-        }
-      }
-
-      return { error: null };
+      // Native path: the iOS Google Sign-In SDK shows the system account
+      // picker with accounts already on the device, returns an ID token,
+      // and we hand that straight to Supabase. No in-app browser, no
+      // deep link round trip.
+      return signInWithGoogleNative();
     } else {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -166,26 +152,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithApple = async () => {
     if (isNativePlatform()) {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "apple",
-        options: {
-          redirectTo: "co.givetime.app://auth-callback",
-          skipBrowserRedirect: true,
-        },
-      });
-
-      if (error) return { error: error.message };
-
-      if (data?.url) {
-        try {
-          const { Browser } = await import("@capacitor/browser");
-          await Browser.open({ url: data.url });
-        } catch {
-          return { error: "Could not open browser for sign-in." };
-        }
-      }
-
-      return { error: null };
+      // Native path: real iOS Sign in with Apple sheet (Face ID / Touch ID),
+      // not a web view. Returns an ID token for Supabase.
+      return signInWithAppleNative();
     } else {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
@@ -201,6 +170,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { error } = await supabase.rpc("delete_user_account");
       if (error) return { error: error.message };
+
+      if (isNativePlatform()) {
+        try {
+          const { SocialLogin } = await import("@capgo/capacitor-social-login");
+          await SocialLogin.logout({ provider: "google" }).catch(() => {});
+        } catch {}
+      }
+
       // User is already deleted from auth.users, so signOut may fail.
       // That's fine — just clear local state.
       try { await supabase.auth.signOut(); } catch {}
@@ -213,6 +190,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    // Clear the native provider session too. Without this the Google SDK
+    // keeps its cached account and silently reuses it, so the account
+    // picker never reappears on the next sign-in.
+    if (isNativePlatform()) {
+      try {
+        const { SocialLogin } = await import("@capgo/capacitor-social-login");
+        await SocialLogin.logout({ provider: "google" }).catch(() => {});
+      } catch {}
+    }
+
     await supabase.auth.signOut();
     setUser(null);
     setProfile(null);

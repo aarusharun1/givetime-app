@@ -80,7 +80,8 @@ export default function NativeTabBar({
     <div
       className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
       style={{
-        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 14px)",
+        // Lowered: sits closer to the home indicator, Blokkd style.
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 4px)",
         paddingLeft: "20px",
         paddingRight: "20px",
       }}
@@ -89,33 +90,53 @@ export default function NativeTabBar({
         className="w-full max-w-md flex items-center justify-around pointer-events-auto"
         style={{
           position: "relative",
+          // Thinner tint than before so more of the page shows through and
+          // the blur does the work. Heavy tint is what makes CSS glass read
+          // as "frosted plastic" rather than glass.
           backgroundColor: isDark
-            ? "rgba(38, 38, 40, 0.55)"
-            : "rgba(245, 245, 247, 0.45)",
-          backdropFilter: "blur(40px) saturate(200%) brightness(1.1)",
-          WebkitBackdropFilter: "blur(40px) saturate(200%) brightness(1.1)",
+            ? "rgba(30, 30, 32, 0.45)"
+            : "rgba(250, 250, 252, 0.38)",
+          backdropFilter: "blur(28px) saturate(220%) brightness(1.06)",
+          WebkitBackdropFilter: "blur(28px) saturate(220%) brightness(1.06)",
           borderRadius: "26px",
           padding: "5px",
           border: isDark
-            ? "0.5px solid rgba(255, 255, 255, 0.12)"
-            : "0.5px solid rgba(255, 255, 255, 0.6)",
+            ? "0.5px solid rgba(255, 255, 255, 0.10)"
+            : "0.5px solid rgba(255, 255, 255, 0.65)",
+          // Outer shadow lifts it off the content; the two inset lines give
+          // the rim its thickness, which is most of the glass illusion.
           boxShadow: isDark
-            ? "0 4px 24px rgba(0, 0, 0, 0.35), inset 0 0.5px 0 rgba(255, 255, 255, 0.06)"
-            : "0 4px 24px rgba(0, 0, 0, 0.08), inset 0 0.5px 0 rgba(255, 255, 255, 0.8)",
+            ? "0 8px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -1px 0 rgba(255, 255, 255, 0.04)"
+            : "0 8px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(255, 255, 255, 0.45)",
           overflow: "hidden",
+          isolation: "isolate",
         }}
       >
-        {/* Specular highlight at top edge */}
+        {/* Top specular sweep: brightest in the middle, fading at the corners */}
         <div
           style={{
             position: "absolute",
             top: 0,
-            left: "10%",
-            right: "10%",
-            height: "1px",
+            left: "6%",
+            right: "6%",
+            height: "1.5px",
+            borderRadius: "1px",
             background: isDark
-              ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)"
-              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent)",
+              ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.28), rgba(255,255,255,0.10), transparent)"
+              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.95), rgba(255,255,255,0.55), transparent)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Vertical sheen: light catches the upper half of the pill */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "26px",
+            background: isDark
+              ? "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.015) 45%, rgba(255,255,255,0) 60%)"
+              : "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 45%, rgba(255,255,255,0) 60%)",
             pointerEvents: "none",
           }}
         />
@@ -141,15 +162,18 @@ export default function NativeTabBar({
                   : "rgba(0, 0, 0, 0.35)",
                 backgroundColor: isActive
                   ? isDark
-                    ? "rgba(255, 255, 255, 0.1)"
-                    : "rgba(255, 255, 255, 0.55)"
+                    ? "rgba(255, 255, 255, 0.09)"
+                    : "rgba(255, 255, 255, 0.72)"
                   : "transparent",
+                // The active bubble gets its own rim light plus a faint green
+                // spill, so it reads as a lit piece of glass rather than a
+                // flat highlighted rectangle.
                 boxShadow: isActive
                   ? isDark
-                    ? "inset 0 0.5px 0 rgba(255,255,255,0.08), 0 1px 3px rgba(0,0,0,0.15)"
-                    : "inset 0 0.5px 0 rgba(255,255,255,0.9), 0 1px 3px rgba(0,0,0,0.06)"
+                    ? "inset 0 1px 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(255,255,255,0.04), 0 2px 8px rgba(0,0,0,0.22), 0 0 14px rgba(76,175,80,0.10)"
+                    : "inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(255,255,255,0.6), 0 2px 8px rgba(0,0,0,0.08), 0 0 14px rgba(46,125,50,0.08)"
                   : "none",
-                transition: "all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                transition: "all 0.35s cubic-bezier(0.32, 0.72, 0, 1)",
               }}
             >
               {tab.icon}

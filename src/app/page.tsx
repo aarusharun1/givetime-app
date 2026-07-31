@@ -275,7 +275,10 @@ export default function Home() {
         </header>
 
         {/* Content area with bottom padding for tab bar */}
-        <div style={{ paddingBottom: "calc(56px + env(safe-area-inset-bottom, 0px))" }}>
+        {/* Tab bar is about 63px tall and now sits 4px off the safe area,
+            so content needs to clear roughly 76px plus the inset. The old
+            56px let the last row of cards slide under the bar. */}
+        <div style={{ paddingBottom: "calc(76px + env(safe-area-inset-bottom, 0px))" }}>
           {activeTab === "browse" && (
             <>
               {user && <MonthlySummaryBanner />}

@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ORG_TYPES, FORMATS, COUNTIES } from "@/data/types";
 import { hapticLight } from "@/lib/haptics";
+
+// Remembers whether the native filter panel was left open or closed.
+// Native only: the web bar is always expanded, so there is no state to keep.
+const FILTERS_OPEN_KEY = "givetime-filters-open";
 
 interface FilterBarProps {
   search: string;
@@ -62,7 +66,29 @@ export default function FilterBar({
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState("");
   const [nearMeActive, setNearMeActive] = useState(false);
+
+  // Starts closed so the first render matches the static HTML, then the
+  // saved value is applied on the client. Same pattern as isNativePlatform:
+  // reading localStorage during render would cause a hydration mismatch.
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  useEffect(() => {
+    if (!collapsible) return;
+    try {
+      if (window.localStorage.getItem(FILTERS_OPEN_KEY) === "true") {
+        setFiltersOpen(true);
+      }
+    } catch {}
+  }, [collapsible]);
+
+  const toggleFilters = () => {
+    const next = !filtersOpen;
+    setFiltersOpen(next);
+    hapticLight();
+    try {
+      window.localStorage.setItem(FILTERS_OPEN_KEY, next ? "true" : "false");
+    } catch {}
+  };
 
   const hasActiveFilters =
     search || selectedType !== "All" || selectedFormat !== "All" || selectedCounty !== "All" || age || tracksHoursOnly;
@@ -304,8 +330,17 @@ export default function FilterBar({
 
   return (
     <div
-      className="sticky top-16 z-40 pb-5 pt-5"
-      style={{ backgroundColor: "var(--bg-primary)" }}
+      className="sticky z-40 pb-5 pt-5"
+      style={{
+        backgroundColor: "var(--bg-primary)",
+        // Web header is a fixed 64px tall, so top-16 was correct there.
+        // The native header is 48px PLUS the safe-area inset (~59px on a
+        // Dynamic Island phone), so a hardcoded 64px made the filter bar
+        // stick underneath the header and hid the search box on scroll.
+        top: collapsible
+          ? "calc(env(safe-area-inset-top, 0px) + 48px)"
+          : "4rem",
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {disabled && (
@@ -351,10 +386,7 @@ export default function FilterBar({
           {/* Filter toggle button (collapsible mode only) */}
           {collapsible && (
             <button
-              onClick={() => {
-                setFiltersOpen(!filtersOpen);
-                hapticLight();
-              }}
+              onClick={toggleFilters}
               className="relative flex items-center justify-center w-10 h-10 rounded-lg shrink-0 transition-colors"
               style={{
                 backgroundColor: filtersOpen ? "var(--green-primary)" : "var(--bg-card)",

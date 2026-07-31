@@ -32,6 +32,19 @@
 				<string>co.givetime.app</string>
 			</array>
 		</dict>
+		<!-- Google Sign-In callback. Replace the string below with the
+		     REVERSED client ID from your iOS OAuth client in Google Cloud
+		     Console. It must start with com.googleusercontent.apps -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>google-signin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.928916741121-h04evq1lcvrdu33dlk1hbd3cjddmfh5i</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
