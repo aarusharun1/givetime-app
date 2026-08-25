@@ -21,6 +21,11 @@ export interface HourLog {
   date: string;
   hours: number;
   notes: string;
+  /**
+   * True for hours imported in bulk through the past-hours wizard rather than
+   * logged shift by shift. Rows written before v1.1.0 come back as false.
+   */
+  is_prior: boolean;
   created_at: string;
 }
 

@@ -106,6 +106,7 @@ export default function SummaryPage() {
         .from("hour_logs")
         .select("*")
         .eq("user_id", user.id)
+        .eq("is_prior", false)
         .gte("date", startDate)
         .lte("date", endDate)
         .order("date", { ascending: false });

@@ -29,6 +29,7 @@ export default function MonthlySummaryBanner() {
         .from("hour_logs")
         .select("*", { count: "exact", head: true })
         .eq("user_id", user.id)
+        .eq("is_prior", false)
         .gte("date", startDate)
         .lte("date", endDate);
 

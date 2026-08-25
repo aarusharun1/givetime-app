@@ -5,6 +5,7 @@ import { useAuth } from "./AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { useOrganizations } from "@/lib/useOrganizations";
 import { hapticSuccess } from "@/lib/haptics";
+import { localDateStr } from "@/lib/dates";
 import { ORG_TYPES } from "@/data/types";
 
 interface LogHourModalProps {
@@ -27,10 +28,7 @@ export default function LogHourModal({
   );
   const [customOrgName, setCustomOrgName] = useState("");
   const [customOrgType, setCustomOrgType] = useState("Community");
-  const [date, setDate] = useState(() => {
-    const today = new Date();
-    return today.toISOString().split("T")[0];
-  });
+  const [date, setDate] = useState(() => localDateStr());
   const [hours, setHours] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -109,7 +107,7 @@ export default function LogHourModal({
     setCustomOrgName("");
     setCustomOrgType("Community");
     setSelectedOrgSlug(preselectedOrg?.slug ?? "");
-    setDate(new Date().toISOString().split("T")[0]);
+    setDate(localDateStr());
     hapticSuccess();
     onLogged();
     onClose();
@@ -255,7 +253,7 @@ export default function LogHourModal({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              max={new Date().toISOString().split("T")[0]}
+              max={localDateStr()}
               className="w-full px-4 py-3 rounded-xl text-sm outline-none"
               style={{
                 backgroundColor: "var(--bg-filter)",
