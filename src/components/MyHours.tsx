@@ -520,55 +520,59 @@ export default function MyHours() {
               </>
             )}
           </p>
-          <div className="flex flex-wrap items-center gap-2 mt-3">
-            {logs.length > 0 && (
-              <>
-                <button
-                  onClick={() => exportCSV(logs, profile?.display_name ?? "")}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
-                  style={{
-                    color: "var(--text-secondary)",
-                    border: "1px solid var(--border-color)",
-                    fontFamily: "'Sora', sans-serif",
-                  }}
-                  title="Export all entries as CSV"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                  </svg>
-                  CSV
-                </button>
-                <button
-                  onClick={() =>
-                    exportPDF(
-                      logs,
-                      {
-                        ...analytics,
-                        byType: analytics.byTypeAll,
-                        byOrg: analytics.byOrgAll,
-                      },
-                      profile?.display_name ?? ""
-                    )
-                  }
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
-                  style={{
-                    color: "var(--text-secondary)",
-                    border: "1px solid var(--border-color)",
-                    fontFamily: "'Sora', sans-serif",
-                  }}
-                  title="Export summary report as PDF"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                  </svg>
-                  PDF
-                </button>
-              </>
-            )}
+          {/* Below sm the outer stack puts exports and actions on separate rows.
+              At sm and up the inner wrappers become display:contents, so all
+              four buttons flatten into one row. */}
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 mt-3">
+          {logs.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 sm:contents">
+              <button
+                onClick={() => exportCSV(logs, profile?.display_name ?? "")}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                style={{
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border-color)",
+                  fontFamily: "'Sora', sans-serif",
+                }}
+                title="Export all entries as CSV"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                CSV
+              </button>
+              <button
+                onClick={() =>
+                  exportPDF(
+                    logs,
+                    {
+                      ...analytics,
+                      byType: analytics.byTypeAll,
+                      byOrg: analytics.byOrgAll,
+                    },
+                    profile?.display_name ?? ""
+                  )
+                }
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                style={{
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border-color)",
+                  fontFamily: "'Sora', sans-serif",
+                }}
+                title="Export summary report as PDF"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                PDF
+              </button>
+            </div>
+          )}
+          <div className="flex flex-wrap items-center gap-2 sm:contents">
             <button
               onClick={() => setShowPriorModal(true)}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
@@ -600,6 +604,7 @@ export default function MyHours() {
               </svg>
               Log hours
             </button>
+          </div>
           </div>
         </div>
 
