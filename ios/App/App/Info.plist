@@ -32,9 +32,6 @@
 				<string>co.givetime.app</string>
 			</array>
 		</dict>
-		<!-- Google Sign-In callback. Replace the string below with the
-		     REVERSED client ID from your iOS OAuth client in Google Cloud
-		     Console. It must start with com.googleusercontent.apps -->
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -50,12 +47,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>GiveTime uses your location to find volunteer organizations near you.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>GiveTime uses your location to find volunteer organizations near you.</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
