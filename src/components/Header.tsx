@@ -5,6 +5,7 @@ import { useTheme } from "./ThemeProvider";
 import { useAuth } from "./AuthProvider";
 import Image from "next/image";
 import AuthModal from "./AuthModal";
+import EditNameModal from "./EditNameModal";
 
 interface HeaderProps {
   activeTab?: "browse" | "hours";
@@ -16,6 +17,7 @@ export default function Header({ activeTab = "browse", onTabChange }: HeaderProp
   const { user, profile, signOut, deleteAccount, loading: authLoading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showEditName, setShowEditName] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
   const [deleteError, setDeleteError] = useState("");
@@ -204,6 +206,16 @@ export default function Header({ activeTab = "browse", onTabChange }: HeaderProp
                               </button>
                             </div>
                           )}
+                          <button
+                            onClick={() => {
+                              setShowEditName(true);
+                              setShowUserMenu(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-sm hover:opacity-70"
+                            style={{ color: "var(--text-primary)" }}
+                          >
+                            Edit name
+                          </button>
                           <a
                             href="/submit"
                             onClick={() => setShowUserMenu(false)}
@@ -273,6 +285,11 @@ export default function Header({ activeTab = "browse", onTabChange }: HeaderProp
       </header>
 
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+
+      <EditNameModal
+        isOpen={showEditName}
+        onClose={() => setShowEditName(false)}
+      />
 
       {/* Delete account confirmation modal */}
       {showDeleteConfirm && (

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "./AuthProvider";
 import { useTheme } from "./ThemeProvider";
+import EditNameModal from "./EditNameModal";
 
 function Tag({
   label,
@@ -28,6 +29,7 @@ export default function ProfileTab() {
   const { user, profile, signOut, deleteAccount } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [showEditName, setShowEditName] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
   const [deleteError, setDeleteError] = useState("");
@@ -97,6 +99,43 @@ export default function ProfileTab() {
           border: "1px solid var(--border-color)",
         }}
       >
+        {/* Edit name */}
+        <button
+          onClick={() => setShowEditName(true)}
+          className="w-full flex items-center justify-between px-4 py-3.5"
+          style={{
+            borderBottom: "1px solid var(--border-color)",
+            color: "var(--text-primary)",
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--text-secondary)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span className="text-sm font-medium">Edit name</span>
+          </div>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--text-muted)"
+            strokeWidth="2"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+
         {/* Dark mode */}
         <div
           className="flex items-center justify-between px-4 py-3.5"
@@ -448,6 +487,11 @@ export default function ProfileTab() {
           &copy; 2024-2026 GiveTime by Aarush Arun
         </p>
       </div>
+
+      <EditNameModal
+        isOpen={showEditName}
+        onClose={() => setShowEditName(false)}
+      />
 
       {/* Sign out confirmation modal */}
       {showSignOutConfirm && (

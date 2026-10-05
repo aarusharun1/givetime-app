@@ -7,6 +7,7 @@ import {
   VALID_GOOGLE_AUDIENCES,
   googleConfigIsPlaceholder,
 } from "@/lib/authConfig";
+import { FALLBACK_DISPLAY_NAME, nameFromParts } from "@/lib/displayName";
 
 // ─── Nonce helpers ───────────────────────────────────────────
 //
@@ -177,18 +178,52 @@ export async function signInWithAppleNative(): Promise<{ error: string | null }>
       options: {},
     });
 
-    const result = response.result as { idToken?: string | null };
+    const result = response.result as {
+      idToken?: string | null;
+      profile?: {
+        givenName?: string | null;
+        familyName?: string | null;
+      } | null;
+    };
 
     if (!result.idToken) {
       return { error: "Apple did not return an ID token." };
     }
 
-    const { error } = await supabase.auth.signInWithIdToken({
+    const { data, error } = await supabase.auth.signInWithIdToken({
       provider: "apple",
       token: result.idToken,
     });
 
-    return { error: error?.message ?? null };
+    if (error) return { error: error.message };
+
+    // Apple never puts the user's name in the ID token, so Supabase cannot
+    // fill it in and the new profile row starts out as "Volunteer". The name
+    // only comes back in the native response, next to the token. The plugin
+    // already asks Apple for it by default (empty options means name and
+    // email), and it remembers the name on this device, because Apple itself
+    // only sends it the very first time someone authorizes the app.
+    //
+    // Only the "Volunteer" placeholder is ever replaced here. A name the
+    // user typed themselves is never overwritten.
+    const appleName = nameFromParts(
+      result.profile?.givenName,
+      result.profile?.familyName
+    );
+
+    if (appleName && data.user) {
+      // If this fails the sign-in still stands. The app will ask for the
+      // name instead (see NamePrompt).
+      try {
+        await supabase
+          .from("profiles")
+          .update({ display_name: appleName })
+          .eq("id", data.user.id)
+          .eq("display_name", FALLBACK_DISPLAY_NAME);
+      } catch {}
+    }
+
+    return { error: null };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     if (/cancel/i.test(message)) return { error: null };

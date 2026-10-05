@@ -6,17 +6,25 @@ import {
   useEffect,
   useState,
   useCallback,
+  useRef,
   ReactNode,
 } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase, Profile } from "@/lib/supabase";
 import { isNativePlatform } from "@/lib/platform";
 import { signInWithGoogleNative, signInWithAppleNative } from "@/lib/nativeAuth";
+import { cleanDisplayName, isFallbackName } from "@/lib/displayName";
 
 interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
+  /**
+   * True when the signed-in user's name is still the "Volunteer"
+   * placeholder, so the app should ask for it.
+   */
+  needsName: boolean;
+  updateDisplayName: (name: string) => Promise<{ error: string | null }>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithEmail: (
     email: string,
@@ -35,13 +43,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  // True while native Apple sign-in is still saving the name Apple sent.
+  // Keeps the "what should we call you" prompt from flashing up in the
+  // moment between the profile loading and the name being written.
+  const [appleNamePending, setAppleNamePending] = useState(false);
+
+  // Profile loads can overlap (app start, sign-in, the reload after Apple
+  // sign-in). Only the most recently started one is allowed to set state,
+  // so a slow older response can never put a stale name back on screen.
+  const profileRequestId = useRef(0);
 
   const fetchProfile = useCallback(async (userId: string) => {
+    const requestId = ++profileRequestId.current;
     const { data } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", userId)
       .single();
+    if (requestId !== profileRequestId.current) return;
     setProfile(data);
   }, []);
 
@@ -154,7 +173,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (isNativePlatform()) {
       // Native path: real iOS Sign in with Apple sheet (Face ID / Touch ID),
       // not a web view. Returns an ID token for Supabase.
-      return signInWithAppleNative();
+      //
+      // signInWithAppleNative also saves the name Apple sends back. The
+      // profile was already loaded once when the session appeared, before
+      // that save finished, so load it again here to pick up the real name.
+      setAppleNamePending(true);
+      try {
+        const result = await signInWithAppleNative();
+        if (!result.error) {
+          const {
+            data: { session },
+          } = await supabase.auth.getSession();
+          if (session?.user) await fetchProfile(session.user.id);
+        }
+        return result;
+      } finally {
+        setAppleNamePending(false);
+      }
     } else {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
@@ -165,6 +200,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: error?.message ?? null };
     }
   };
+
+  const updateDisplayName = async (name: string) => {
+    if (!user) return { error: "You need to be signed in to do that." };
+
+    const { value, error: invalid } = cleanDisplayName(name);
+    if (invalid) return { error: invalid };
+
+    // .select().single() makes a silent no-op show up as an error. Without
+    // it, an update that matched no row would look like a success.
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({ display_name: value })
+      .eq("id", user.id)
+      .select()
+      .single();
+
+    if (error || !data) {
+      return { error: "Could not save your name. Please try again." };
+    }
+
+    // Cancel any profile load still in flight so it cannot overwrite this.
+    profileRequestId.current++;
+    setProfile(data);
+    return { error: null };
+  };
+
+  const needsName =
+    !!user && !!profile && !appleNamePending && isFallbackName(profile.display_name);
 
   const deleteAccount = async () => {
     try {
@@ -211,6 +274,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         profile,
         loading,
+        needsName,
+        updateDisplayName,
         signInWithEmail,
         signUpWithEmail,
         signInWithGoogle,
